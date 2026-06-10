@@ -282,6 +282,14 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 24px;
 }
 
+.about-bullets { margin-bottom: 24px; }
+.about-bullet {
+  font-size: 14px; color: rgba(240,240,240,0.7);
+  padding: 6px 0; border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+}
+.about-bullet:last-child { border-bottom: none; }
+
 .about-open {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 13px; color: var(--text-muted);
