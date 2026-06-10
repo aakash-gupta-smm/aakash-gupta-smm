@@ -1,0 +1,35 @@
+name: Freelance Opportunity Monitor (Daily)
+
+on:
+  schedule:
+    - cron: '0 4 * * *'   # Every day 9:30 AM IST (4:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Run Freelance Monitor
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: python agents/freelance_monitor.py
+
+      - name: Save log to repo
+        run: |
+          git config user.name "Aakash's Freelance Agent"
+          git config user.email "akashgupta8163@gmail.com"
+          git add data/freelance_log.json || true
+          git diff --staged --quiet || git commit -m "Freelance log update $(date +'%Y-%m-%d')"
+          git push || true

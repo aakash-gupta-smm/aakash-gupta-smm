@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aakash — Personal Agent Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #080808; --bg2: #111; --bg3: #1a1a1a;
+      --text: #f0f0f0; --muted: #666;
+      --accent: #7c6af7; --green: #22c55e;
+      --orange: #f5821f; --red: #ef4444;
+      --border: rgba(255,255,255,0.08);
+      --font: 'Space Grotesk', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+    .header {
+      padding: 28px 40px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-left h1 { font-size: 20px; font-weight: 700; }
+    .header-left p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .header-tag {
+      font-size: 12px; color: var(--green);
+      border: 1px solid rgba(34,197,94,0.3);
+      padding: 6px 16px; border-radius: 40px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .header-tag::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--green); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
+
+    .main { padding: 40px; max-width: 1200px; margin: 0 auto; }
+
+    /* STATS ROW */
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 40px; }
+    .stat-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 24px;
+    }
+    .stat-card .label { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+    .stat-card .value { font-size: 36px; font-weight: 700; }
+    .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .stat-card.accent-border { border-color: rgba(124,106,247,0.3); }
+
+    /* AGENT CARDS */
+    .agents { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-bottom: 40px; }
+    .agent-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+    }
+    .agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .agent-icon { font-size: 28px; }
+    .agent-name { font-size: 16px; font-weight: 600; }
+    .agent-role { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .agent-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; padding: 4px 12px; border-radius: 40px;
+      margin-bottom: 16px;
+    }
+    .status-active { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .status-idle { background: rgba(255,255,255,0.04); color: var(--muted); border: 1px solid var(--border); }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .agent-last { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .agent-schedule { font-size: 12px; color: var(--accent); margin-top: 8px; }
+
+    /* TABLES */
+    .section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+
+    .table-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+    .table-card .table-header { padding: 20px 24px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+    .table-card .table-header span { font-size: 12px; color: var(--muted); font-weight: 400; }
+    .table-row { padding: 14px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .table-row:last-child { border-bottom: none; }
+    .table-row-left { font-size: 14px; }
+    .table-row-left .row-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 40px; }
+    .badge-green { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+    .badge-purple { background: rgba(124,106,247,0.1); color: var(--accent); border: 1px solid rgba(124,106,247,0.2); }
+    .badge-orange { background: rgba(245,130,31,0.1); color: var(--orange); border: 1px solid rgba(245,130,31,0.2); }
+    .badge-red { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
+
+    .empty { padding: 40px 24px; text-align: center; color: var(--muted); font-size: 14px; }
+
+    .footer { padding: 24px 40px; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Aakash's Personal Agent Dashboard</h1>
+    <p id="last-updated">Loading...</p>
+  </div>
+  <div class="header-tag">Agents Active</div>
+</div>
+
+<div class="main">
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-card accent-border">
+      <div class="label">LinkedIn Posts</div>
+      <div class="value" id="stat-posts">—</div>
+      <div class="sub">Published total</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">This Week</div>
+      <div class="value" id="stat-week">—</div>
+      <div class="sub">Posts this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Opportunities</div>
+      <div class="value" id="stat-opps">—</div>
+      <div class="sub">Found this month</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Portfolio Projects</div>
+      <div class="value" id="stat-projects">—</div>
+      <div class="sub">In portfolio</div>
+    </div>
+  </div>
+
+  <!-- AGENTS -->
+  <div class="section-title">Agents</div>
+  <div class="agents" style="margin-bottom:40px;">
+    <div class="agent-card">
+      <div class="agent-header">
+        <div class="agent-icon">💼</div>
+        <div>
+          <div class="agent-name">LinkedIn Agent</div>
+          <div class="agent-role">Content & Publishing</div>
+        </div>
+      </div>
+      <div class="agent-status status-active"><span class="status-dot"></span>Active</div>
+      <div class="agent-last" id="linkedin-last">Last post: loading...</div>
+      <div class="agent-schedule">Posts Mon · Wed · Fri at 9 AM</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-header">
+        <div class="agent-icon">🎯</div>
+        <div>
+          <div class="agent-name">Freelance Monitor</div>
+          <div class="agent-role">Opportunity Hunter</div>
+        </div>
+      </div>
+      <div class="agent-status status-active"><span class="status-dot"></span>Active</div>
+      <div class="agent-last" id="freelance-last">Last check: loading...</div>
+      <div class="agent-schedule">Checks daily at 9:30 AM</div>
+    </div>
+    <div class="agent-card">
+      <div class="agent-header">
+        <div class="agent-icon">📁</div>
+        <div>
+          <div class="agent-name">Portfolio Agent</div>
+          <div class="agent-role">Portfolio Updater</div>
+        </div>
+      </div>
+      <div class="agent-status status-active"><span class="status-dot"></span>Active</div>
+      <div class="agent-last" id="portfolio-last">Last update: loading...</div>
+      <div class="agent-schedule">Check-in every Sunday</div>
+    </div>
+  </div>
+
+  <!-- LINKEDIN POSTS + OPPORTUNITIES -->
+  <div class="grid2">
+    <div class="table-card">
+      <div class="table-header">Recent LinkedIn Posts <span id="posts-count"></span></div>
+      <div id="posts-list"><div class="empty">No posts yet</div></div>
+    </div>
+    <div class="table-card">
+      <div class="table-header">Freelance Opportunities <span id="opps-count"></span></div>
+      <div id="opps-list"><div class="empty">No opportunities yet</div></div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO PROJECTS -->
+  <div class="table-card">
+    <div class="table-header">Portfolio Projects <span id="projects-count"></span></div>
+    <div id="projects-list"><div class="empty">No projects added yet — reply to Sunday check-in to add one</div></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>Aakash Gupta · Personal Agent System</span>
+  <span id="footer-time">—</span>
+</div>
+
+<script>
+const BASE = '..';
+
+async function loadJSON(path, fallback) {
+  try {
+    const r = await fetch(path + '?t=' + Date.now());
+    if (!r.ok) return fallback;
+    return await r.json();
+  } catch { return fallback; }
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return 'Never';
+  const d = new Date(dateStr);
+  const diff = Math.floor((Date.now() - d) / 1000);
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return Math.floor(diff/60) + ' min ago';
+  if (diff < 86400) return Math.floor(diff/3600) + ' hr ago';
+  return Math.floor(diff/86400) + ' day(s) ago';
+}
+
+function isThisWeek(dateStr) {
+  const d = new Date(dateStr);
+  const now = new Date();
+  const weekAgo = new Date(now - 7*24*60*60*1000);
+  return d >= weekAgo;
+}
+
+async function render() {
+  const linkedinLog = await loadJSON(BASE + '/data/linkedin_log.json', []);
+  const freelanceLog = await loadJSON(BASE + '/data/freelance_log.json', []);
+  const portfolio = await loadJSON(BASE + '/portfolio/data/portfolio.json', { projects: [] });
+
+  // Stats
+  const thisWeekPosts = linkedinLog.filter(p => isThisWeek(p.date)).length;
+  const thisMonthOpps = freelanceLog.filter(o => {
+    const d = new Date(o.date);
+    const now = new Date();
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+
+  document.getElementById('stat-posts').textContent = linkedinLog.length || '0';
+  document.getElementById('stat-week').textContent = thisWeekPosts;
+  document.getElementById('stat-opps').textContent = thisMonthOpps;
+  document.getElementById('stat-projects').textContent = portfolio.projects?.length || '0';
+
+  // LinkedIn last post
+  if (linkedinLog.length > 0) {
+    const last = linkedinLog[linkedinLog.length - 1];
+    document.getElementById('linkedin-last').textContent = 'Last post: ' + last.date + ' — ' + last.topic?.substring(0, 50) + '...';
+  }
+
+  // Freelance last check
+  if (freelanceLog.length > 0) {
+    const last = freelanceLog[freelanceLog.length - 1];
+    document.getElementById('freelance-last').textContent = 'Last found: ' + last.date + ' — ' + last.title;
+  }
+
+  // Portfolio last update
+  if (portfolio.last_updated) {
+    document.getElementById('portfolio-last').textContent = 'Last updated: ' + portfolio.last_updated;
+  }
+
+  // Posts list
+  const postsList = document.getElementById('posts-list');
+  if (linkedinLog.length > 0) {
+    postsList.innerHTML = [...linkedinLog].reverse().slice(0, 8).map(p => `
+      <div class="table-row">
+        <div class="table-row-left">
+          <div>${p.topic?.substring(0, 55)}${p.topic?.length > 55 ? '...' : ''}</div>
+          <div class="row-sub">${p.date}</div>
+        </div>
+        <span class="badge ${p.status === 'published' ? 'badge-green' : 'badge-red'}">${p.status}</span>
+      </div>
+    `).join('');
+    document.getElementById('posts-count').textContent = linkedinLog.length + ' total';
+  }
+
+  // Opportunities list
+  const oppsList = document.getElementById('opps-list');
+  if (freelanceLog.length > 0) {
+    oppsList.innerHTML = [...freelanceLog].reverse().slice(0, 8).map(o => `
+      <div class="table-row">
+        <div class="table-row-left">
+          <div>${o.title} · ${o.company}</div>
+          <div class="row-sub">${o.location} · ${o.date}</div>
+        </div>
+        <span class="badge badge-purple">Social Media</span>
+      </div>
+    `).join('');
+    document.getElementById('opps-count').textContent = freelanceLog.length + ' total';
+  }
+
+  // Projects list
+  const projectsList = document.getElementById('projects-list');
+  if (portfolio.projects?.length > 0) {
+    projectsList.innerHTML = portfolio.projects.map(p => `
+      <div class="table-row">
+        <div class="table-row-left">
+          <div>${p.emoji || '💼'} ${p.title}</div>
+          <div class="row-sub">${p.category} · ${p.date}</div>
+        </div>
+        <span class="badge badge-orange">${p.category}</span>
+      </div>
+    `).join('');
+    document.getElementById('projects-count').textContent = portfolio.projects.length + ' projects';
+  }
+
+  document.getElementById('last-updated').textContent = 'Last refreshed: ' + new Date().toLocaleTimeString('en-IN');
+  document.getElementById('footer-time').textContent = new Date().toLocaleString('en-IN');
+}
+
+render();
+setInterval(render, 60000); // Refresh every minute
+</script>
+</body>
+</html>

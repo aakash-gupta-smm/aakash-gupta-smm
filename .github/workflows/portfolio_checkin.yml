@@ -1,0 +1,27 @@
+name: Portfolio Weekly Check-in (Sunday)
+
+on:
+  schedule:
+    - cron: '0 5 * * 0'   # Every Sunday 10:30 AM IST (5:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Send weekly check-in email
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: python agents/portfolio_agent.py checkin
