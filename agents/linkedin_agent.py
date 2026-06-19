@@ -19,23 +19,44 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 # ── CONTENT TOPICS ──────────────────────────────────────────
 # Rotates through these so posts stay varied
+# Positioned as Digital Marketing Manager targeting Shopify, Google Ads, Meta Ads freelance work
+# and a full-time DM Manager switch by Sep-Oct 2026
 TOPIC_POOL = [
-    # SMM & Strategy
-    {"topic": "One thing I've learned about social media strategy that no course teaches you", "pillar": "smm", "type": "insight"},
-    {"topic": "Why most brands post every day but still get zero engagement", "pillar": "smm", "type": "problem-solution"},
-    {"topic": "How I build a social media strategy for a brand from scratch", "pillar": "smm", "type": "how-to"},
-    {"topic": "The difference between posting content and building a brand on social media", "pillar": "smm", "type": "insight"},
-    {"topic": "3 Meta Ads mistakes I see Indian SMEs make every single day", "pillar": "paid-ads", "type": "tips"},
-    {"topic": "What happens when you optimise for reach instead of results", "pillar": "smm", "type": "insight"},
-    # Digital Marketing / Learning
-    {"topic": "Why I'm adding SEO, Shopify and WordPress to my skillset in 2026", "pillar": "learning", "type": "personal"},
-    {"topic": "The AI tools that are actually changing how I work as a social media manager", "pillar": "ai", "type": "tools"},
-    {"topic": "What I wish I knew about paid ads before I ran my first campaign", "pillar": "paid-ads", "type": "personal"},
-    {"topic": "How digital marketing is changing with AI — and what that means for marketers", "pillar": "ai", "type": "insight"},
+    # Google Ads
+    {"topic": "3 Google Ads mistakes that burn budget without anyone noticing", "pillar": "google-ads", "type": "tips"},
+    {"topic": "How I structure a Google Ads campaign for a brand new business with zero history", "pillar": "google-ads", "type": "how-to"},
+    {"topic": "Why most small businesses waste their first Google Ads budget — and how to fix it", "pillar": "google-ads", "type": "problem-solution"},
+    {"topic": "Search vs Performance Max — which one should Indian SMEs actually run?", "pillar": "google-ads", "type": "insight"},
+
+    # Meta Ads
+    {"topic": "3 Meta Ads mistakes I see Indian SMEs make every single day", "pillar": "meta-ads", "type": "tips"},
+    {"topic": "How I set up a Meta Ads funnel for an e-commerce brand from scratch", "pillar": "meta-ads", "type": "how-to"},
+    {"topic": "Why your Meta Ads are getting clicks but zero sales", "pillar": "meta-ads", "type": "problem-solution"},
+    {"topic": "The Meta Ads targeting mistake that kills ROAS before the campaign even starts", "pillar": "meta-ads", "type": "insight"},
+
+    # Shopify & E-commerce
+    {"topic": "What I check first when a Shopify store isn't converting despite good traffic", "pillar": "shopify", "type": "how-to"},
+    {"topic": "5 Shopify store mistakes that silently kill conversions", "pillar": "shopify", "type": "tips"},
+    {"topic": "How to set up a Shopify store that's actually built to convert — not just look good", "pillar": "shopify", "type": "how-to"},
+
+    # SEO
+    {"topic": "Why most business owners think SEO is dead — and why they're wrong", "pillar": "seo", "type": "insight"},
+    {"topic": "The 3 SEO basics that move the needle for small businesses in 2026", "pillar": "seo", "type": "tips"},
+    {"topic": "How I approach SEO for a brand new website with zero domain authority", "pillar": "seo", "type": "how-to"},
+
+    # Digital Marketing Strategy (full-funnel)
+    {"topic": "The difference between running ads and building a digital marketing strategy", "pillar": "strategy", "type": "insight"},
+    {"topic": "How I plan a full-funnel digital marketing strategy for an Indian SME", "pillar": "strategy", "type": "how-to"},
+    {"topic": "Why digital marketing without data is just expensive guesswork", "pillar": "strategy", "type": "insight"},
+
+    # AI & Tools
+    {"topic": "The AI tools that are actually changing how I work as a digital marketer", "pillar": "ai", "type": "tools"},
+    {"topic": "How I use AI to cut my campaign reporting time by 70%", "pillar": "ai", "type": "tools"},
+
     # Career / Personal Brand
-    {"topic": "4 years in social media — here's what actually matters", "pillar": "career", "type": "personal"},
-    {"topic": "What no one tells you about working as a social media manager in India", "pillar": "career", "type": "personal"},
-    {"topic": "Why I'm building in public — my 2026 learning journey", "pillar": "learning", "type": "personal"},
+    {"topic": "4 years in marketing — what I wish I knew before running my first paid campaign", "pillar": "career", "type": "personal"},
+    {"topic": "Why I'm expanding from social media to full-stack digital marketing in 2026", "pillar": "career", "type": "personal"},
+    {"topic": "What no one tells you about becoming a Digital Marketing Manager in India", "pillar": "career", "type": "personal"},
 ]
 
 
@@ -51,25 +72,31 @@ def pick_topic() -> dict:
 def generate_linkedin_post(topic: str, pillar: str, post_type: str) -> str:
     """Generate a LinkedIn post using Claude."""
 
-    prompt = f"""Write a LinkedIn post for Aakash Gupta, a Social Media Manager and Brand Strategist from Ghaziabad, India.
+    prompt = f"""Write a LinkedIn post for Aakash Gupta, a Digital Marketing Manager from Ghaziabad, India.
 
 TOPIC: {topic}
 PILLAR: {pillar}
 TYPE: {post_type}
 
 About Aakash:
-- 4+ years experience in social media management
-- Currently managing social media at Assert IT Solutions
-- Experience across tech, e-commerce, education and logistics
-- Currently learning Digital Marketing with AI (WordPress, SEO, Shopify, Google Ads, Meta Ads)
-- Based in Ghaziabad, open to remote freelance and full-time roles
+- 4+ years experience in digital marketing — social media, paid ads, SEO, and e-commerce
+- Currently working as Digital Marketing Manager at Assert IT Solutions
+- Hands-on experience with Google Ads, Meta Ads, Shopify, SEO, and content strategy
+- Has worked across tech, e-commerce, education and logistics sectors
+- Open to freelance projects (Google Ads, Meta Ads, Shopify) and full-time Digital Marketing Manager roles (targeting Sep-Oct 2026 switch)
+- Based in Ghaziabad, open to remote work
+
+GOAL OF THIS POST:
+Position Aakash as a skilled, experienced Digital Marketing Manager — not just a social media person.
+The post should attract: (a) freelance clients who need Google Ads, Meta Ads, or Shopify help, and/or (b) recruiters/companies looking for a Digital Marketing Manager.
+Every post should subtly signal expertise across the full digital marketing spectrum.
 
 Write a LinkedIn post that:
 1. Starts with a strong hook (first line must stop the scroll — a bold statement, surprising fact, or direct question)
 2. Uses short paragraphs — max 2-3 lines each
 3. Feels personal and real — written from his own experience, not generic advice
 4. Is informative but not preachy
-5. Ends with either a question to spark comments OR a clear CTA (DM me, follow for more, etc.)
+5. Ends with either a question to spark comments OR a clear CTA (DM me for a free audit, let's connect, etc.)
 6. Uses line breaks and white space — LinkedIn posts with breathing room get more reads
 7. Length: 150-250 words maximum
 8. Professional English only. No Hinglish.
@@ -80,6 +107,7 @@ Do NOT:
 - Use corporate buzzwords like "leverage", "synergy", "passionate about"
 - Sound like a press release
 - Add emojis in every line — use sparingly, only where it genuinely adds value
+- Sound like a beginner or someone still learning — he knows this stuff and has done it
 
 Return only the post text. Nothing else."""
 
