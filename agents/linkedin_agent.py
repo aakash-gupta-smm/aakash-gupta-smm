@@ -40,9 +40,11 @@ TOPIC_POOL = [
 
 
 def pick_topic() -> dict:
-    """Pick a topic — rotate through pool based on day of week."""
+    """Pick a topic — rotate through pool based on week number."""
+    week = datetime.now().isocalendar()[1]
     day = datetime.now().weekday()  # 0=Mon, 2=Wed, 4=Fri
-    index = (datetime.now().isocalendar()[1] * 3 + [0, 1, 2].index(day) if day in [0, 2, 4] else 0) % len(TOPIC_POOL)
+    slot = {0: 0, 2: 1, 4: 2}.get(day, 0)
+    index = (week * 3 + slot) % len(TOPIC_POOL)
     return TOPIC_POOL[index]
 
 
