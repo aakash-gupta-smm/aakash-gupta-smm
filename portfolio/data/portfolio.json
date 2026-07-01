@@ -1,4 +1,31 @@
 {
-  "last_updated": "2026-06-10",
-  "projects": []
+  "last_updated": "2026-07-01",
+  "projects": [
+    {
+      "title": "Built AI-Niche Blog Website on WordPress",
+      "category": "Course Assignment",
+      "emoji": "📝",
+      "description": "Built 'Future of Work AI', a blog website from scratch on WordPress using Elementor, covering AI's impact on careers and industries. Configured SEO-friendly permalink structure, published 3 in-depth articles, and set up a fully functional homepage, blog, and contact page.",
+      "highlights": [
+        "Set up WordPress dashboard, plugins (Elementor, WPForms), pages and posts from scratch",
+        "Chose 'Post Name' permalink structure for clean, SEO-friendly URLs",
+        "Diagnosed and resolved a domain hosting redirect issue independently"
+      ],
+      "tools": ["WordPress", "Elementor", "WPForms", "SEO"],
+      "date": "May 2026"
+    },
+    {
+      "title": "Built E-commerce Store on Shopify (UrbanEdge Store)",
+      "category": "Shopify",
+      "emoji": "🛍️",
+      "description": "Built an e-commerce Shopify store for men's fashion accessories from scratch, covering dashboard setup, product listings, and store structure. Focused on product listing best practices and the role of the About Us page in building trust with ad platforms.",
+      "highlights": [
+        "Structured product listings with compelling titles, HTML descriptions, compare-at pricing, and SEO tags",
+        "Learned how Google and Meta use the About Us page to vet ad account legitimacy",
+        "Mapped out future enhancements: custom domain, collections, shipping/payment setup, theme branding"
+      ],
+      "tools": ["Shopify", "E-commerce", "Product Listing", "SEO"],
+      "date": "May 2026"
+    }
+  ]
 }

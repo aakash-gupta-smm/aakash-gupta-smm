@@ -70,7 +70,7 @@ def generate_case_study(raw_input: str) -> dict:
     Takes rough project notes from Aakash and generates a proper case study.
     Returns structured dict ready to add to portfolio.json.
     """
-    prompt = f"""Aakash Gupta is a Social Media Manager and Brand Strategist. He's provided rough notes about a project he worked on. Turn this into a clean portfolio case study.
+    prompt = f"""Aakash Gupta is a Digital Marketing Manager (Google Ads, Meta Ads, SEO, Shopify, Social Media). He's provided rough notes about a project he worked on. Turn this into a clean portfolio case study.
 
 RAW NOTES:
 {raw_input}
