@@ -29,10 +29,11 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
 # ── DESIGN TOKENS ───────────────────────────────────────────
 SIZE = 1080                      # square carousel, best mobile fill
-BG = (0.04, 0.04, 0.05)          # near-black
+BG = (0.035, 0.035, 0.043)       # near-black
 ACCENT = (0.486, 0.416, 0.969)   # #7C6AF7 — matches portfolio
+ACCENT2 = (0.157, 0.310, 0.855)  # #2850DA — cooler blue for the mesh
 WHITE = (1, 1, 1)
-MUTED = (0.62, 0.62, 0.66)
+MUTED = (0.66, 0.66, 0.72)
 MARGIN = 90
 
 # ── CAROUSEL TOPICS ─────────────────────────────────────────
@@ -111,17 +112,17 @@ def _wrap(text: str, font: str, size: int, width: int) -> list[str]:
     return simpleSplit(text, font, size, width)
 
 
-# Glow anchors — rotated per slide so the deck doesn't feel like one flat template
-_GLOW_SPOTS = [
-    (SIZE * 0.82, SIZE * 0.84),
-    (SIZE * 0.14, SIZE * 0.24),
-    (SIZE * 0.90, SIZE * 0.30),
-    (SIZE * 0.20, SIZE * 0.86),
+# Per-slide mesh layouts: (primary glow, secondary glow) as (x%, y%, radius%)
+_MESH = [
+    ((0.86, 0.86, 0.62), (0.10, 0.20, 0.44)),
+    ((0.12, 0.22, 0.60), (0.90, 0.78, 0.42)),
+    ((0.92, 0.28, 0.58), (0.16, 0.82, 0.46)),
+    ((0.18, 0.84, 0.60), (0.86, 0.22, 0.44)),
 ]
 
 
 def _glow(c: canvas.Canvas, cx: float, cy: float, radius: float,
-          rgb=ACCENT, steps: int = 52, per_ring: float = 0.011):
+          rgb=ACCENT, steps: int = 60, per_ring: float = 0.026):
     """
     Soft radial glow built from stacked translucent circles.
 
@@ -135,27 +136,52 @@ def _glow(c: canvas.Canvas, cx: float, cy: float, radius: float,
 
 
 def _paint_bg(c: canvas.Canvas, index: int = 0):
-    """Black base + soft accent glow + dot grid + corner rules."""
+    """Black base + two-tone mesh glow + grid + orbit rings."""
     # base
     c.setFillColorRGB(*BG)
     c.rect(0, 0, SIZE, SIZE, fill=1, stroke=0)
 
-    # soft accent glow, anchored somewhere different on each slide
-    gx, gy = _GLOW_SPOTS[index % len(_GLOW_SPOTS)]
-    _glow(c, gx, gy, SIZE * 0.58)
+    primary, secondary = _MESH[index % len(_MESH)]
 
-    # fine dot grid for texture
-    c.setFillColor(Color(1, 1, 1, alpha=0.045))
-    step = 54
-    for x in range(step, SIZE, step):
-        for y in range(step, SIZE, step):
-            c.circle(x, y, 1.5, fill=1, stroke=0)
+    # two-tone mesh glow — purple lead, blue support
+    px, py, pr = primary
+    _glow(c, SIZE * px, SIZE * py, SIZE * pr, rgb=ACCENT, per_ring=0.026)
 
-    # hairline corner rules
-    c.setStrokeColor(Color(1, 1, 1, alpha=0.10))
+    sx, sy, sr = secondary
+    _glow(c, SIZE * sx, SIZE * sy, SIZE * sr, rgb=ACCENT2, per_ring=0.020)
+
+    # structural grid lines
+    c.setStrokeColor(Color(1, 1, 1, alpha=0.035))
     c.setLineWidth(1)
-    c.line(SIZE - MARGIN, SIZE - MARGIN + 40, SIZE - MARGIN, SIZE - MARGIN - 40)
-    c.line(MARGIN - 40, MARGIN, MARGIN + 40, MARGIN)
+    for g in range(135, SIZE, 135):
+        c.line(g, 0, g, SIZE)
+        c.line(0, g, SIZE, g)
+
+    # dot grid on the intersections for texture
+    c.setFillColor(Color(1, 1, 1, alpha=0.10))
+    for x in range(135, SIZE, 135):
+        for y in range(135, SIZE, 135):
+            c.circle(x, y, 2.4, fill=1, stroke=0)
+
+    # large concentric orbit rings, centred on the primary glow
+    c.setStrokeColor(Color(1, 1, 1, alpha=0.055))
+    c.setLineWidth(1.4)
+    for r in (SIZE * 0.30, SIZE * 0.46, SIZE * 0.62):
+        c.circle(SIZE * px, SIZE * py, r, fill=0, stroke=1)
+
+    # accent rule in the top-right corner
+    c.setStrokeColor(Color(*ACCENT, alpha=0.55))
+    c.setLineWidth(3)
+    c.line(SIZE - MARGIN - 70, SIZE - MARGIN + 34, SIZE - MARGIN, SIZE - MARGIN + 34)
+
+    # readability scrim — text is left-aligned, so darken the left column and
+    # let the mesh stay bright on the right where nothing is set.
+    # Nested rects all anchored at x=0: the alpha accumulates toward the left
+    # with no seams. Abutting strips would band visibly instead.
+    layers = 44
+    for i in range(layers):
+        c.setFillColor(Color(0, 0, 0, alpha=0.016))
+        c.rect(0, 0, SIZE * 0.88 * (1 - i / layers), SIZE, fill=1, stroke=0)
 
     # alpha lives in the graphics state — reset it or every later draw inherits it
     c.setFillAlpha(1)
