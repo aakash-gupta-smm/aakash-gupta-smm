@@ -1,0 +1,30 @@
+name: LinkedIn Engagement Brief (Weekdays)
+
+on:
+  schedule:
+    # Fired early to absorb GitHub Actions cron drift and land ~9-10 AM IST.
+    - cron: '0 2 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic
+
+      - name: Send engagement brief
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: python agents/engagement_agent.py
