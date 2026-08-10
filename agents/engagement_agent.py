@@ -44,11 +44,29 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 TARGETS_FILE = "data/engagement_targets.json"
 LOOKBACK_HOURS = 72
 
+# Search Engine Land 403s from datacenter IPs, so it is deliberately not the
+# only source here — the list is wide enough that losing one or two feeds still
+# leaves a usable brief across ads, SEO and e-commerce.
 FEEDS = [
-    ("Search Engine Land", "https://searchengineland.com/feed"),
     ("Search Engine Journal", "https://www.searchenginejournal.com/feed/"),
-    ("SEL — Google Ads", "https://searchengineland.com/library/platforms/google/google-ads/feed"),
+    ("Search Engine Roundtable", "https://www.seroundtable.com/index.xml"),
+    ("Google Search Central", "https://developers.google.com/search/blog/feed.xml"),
+    ("Social Media Today", "https://www.socialmediatoday.com/feeds/news/"),
+    ("PPC Land", "https://ppc.land/rss/"),
+    ("Search Engine Land", "https://searchengineland.com/feed"),
 ]
+
+BROWSER_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+    ),
+    "Accept": "application/rss+xml, application/atom+xml, application/xml;q=0.9, */*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+# Atom uses a different element vocabulary to RSS
+ATOM_NS = "{http://www.w3.org/2005/Atom}"
 
 ACCENT = "#7c6af7"
 
@@ -64,39 +82,84 @@ def _clean(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _parse_date(raw: str):
+    """Feeds mix RFC-822 (RSS) and ISO-8601 (Atom) timestamps."""
+    if not raw:
+        return None
+    raw = raw.strip()
+    try:
+        dt = parsedate_to_datetime(raw)
+    except Exception:
+        try:
+            dt = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        except Exception:
+            return None
+    return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt
+
+
+def _extract(node) -> tuple[str, str, str, str]:
+    """Pull (title, link, summary, date) out of either an RSS item or Atom entry."""
+    title = node.findtext("title") or node.findtext(f"{ATOM_NS}title") or ""
+
+    link = (node.findtext("link") or "").strip()
+    if not link:  # Atom puts the URL in an attribute
+        for ln in node.findall(f"{ATOM_NS}link"):
+            if ln.get("rel", "alternate") == "alternate":
+                link = (ln.get("href") or "").strip()
+                break
+
+    summary = (
+        node.findtext("description")
+        or node.findtext(f"{ATOM_NS}summary")
+        or node.findtext(f"{ATOM_NS}content")
+        or ""
+    )
+
+    date = (
+        node.findtext("pubDate")
+        or node.findtext(f"{ATOM_NS}published")
+        or node.findtext(f"{ATOM_NS}updated")
+        or ""
+    )
+    return title, link, summary, date
+
+
 def fetch_feeds() -> list[dict]:
-    """Pull recent items across all feeds."""
+    """Pull recent items across all feeds. Individual feed failures are tolerated."""
     cutoff = datetime.now(timezone.utc) - timedelta(hours=LOOKBACK_HOURS)
     items: list[dict] = []
+    ok_sources = 0
 
     for source, url in FEEDS:
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            req = urllib.request.Request(url, headers=BROWSER_HEADERS)
             with urllib.request.urlopen(req, timeout=20) as resp:
                 root = ET.fromstring(resp.read())
         except Exception as e:
-            print(f"  ⚠️  {source} failed: {e}")
+            print(f"  ⚠️  {source} unavailable: {e}")
             continue
 
-        for node in root.findall(".//item"):
-            pub_raw = node.findtext("pubDate")
-            try:
-                pub = parsedate_to_datetime(pub_raw)
-                if pub.tzinfo is None:
-                    pub = pub.replace(tzinfo=timezone.utc)
-            except Exception:
-                continue
+        nodes = root.findall(".//item") or root.findall(f".//{ATOM_NS}entry")
+        if not nodes:
+            print(f"  ⚠️  {source} returned no entries")
+            continue
+        ok_sources += 1
 
-            if pub < cutoff:
+        for node in nodes:
+            title, link, summary, date_raw = _extract(node)
+            pub = _parse_date(date_raw)
+            if pub is None or pub < cutoff:
                 continue
 
             items.append({
                 "source": source,
-                "title": _clean(node.findtext("title")),
-                "link": (node.findtext("link") or "").strip(),
-                "summary": _clean(node.findtext("description"))[:400],
+                "title": _clean(title),
+                "link": link,
+                "summary": _clean(summary)[:400],
                 "published": pub.isoformat(),
             })
+
+    print(f"  {ok_sources}/{len(FEEDS)} feeds reachable")
 
     # newest first, de-duped by title
     seen, unique = set(), []
