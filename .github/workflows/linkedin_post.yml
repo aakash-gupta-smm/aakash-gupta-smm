@@ -1,10 +1,10 @@
-name: LinkedIn Post (Mon/Wed/Fri)
+name: LinkedIn Text Post (Wed)
 
 on:
   schedule:
-    - cron: '30 4 * * 1'  # Monday    9:00 AM IST (4:30 UTC)
-    - cron: '30 4 * * 3'  # Wednesday 9:00 AM IST
-    - cron: '30 4 * * 5'  # Friday    9:00 AM IST
+    # Mon and Fri are carousels (see carousel_post.yml) — Wed is the text post.
+    # Fired early to absorb GitHub Actions cron drift and land ~9-11 AM IST.
+    - cron: '0 2 * * 3'   # Wednesday
   workflow_dispatch:        # Allow manual trigger from GitHub
 
 jobs:

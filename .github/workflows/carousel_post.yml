@@ -1,0 +1,40 @@
+name: LinkedIn Carousel (Mon/Fri)
+
+on:
+  schedule:
+    # GitHub Actions cron drifts by 1.5-3.5h under load, so we fire early
+    # to land in the ~9-11 AM IST window instead of the evening.
+    - cron: '0 2 * * 1'   # Monday
+    - cron: '0 2 * * 5'   # Friday
+  workflow_dispatch:
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests reportlab
+
+      - name: Run Carousel Agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+        run: python agents/carousel_agent.py
+
+      - name: Save carousel log to repo
+        run: |
+          git config user.name "Aakash's Carousel Agent"
+          git config user.email "akashgupta8163@gmail.com"
+          git add data/carousel_log.json data/carousels || true
+          git diff --staged --quiet || git commit -m "Carousel log update $(date +'%Y-%m-%d')"
+          git push || true

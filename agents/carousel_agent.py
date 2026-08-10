@@ -20,6 +20,7 @@ from datetime import datetime
 
 import anthropic
 from reportlab.pdfgen import canvas
+from reportlab.lib.colors import Color
 from reportlab.lib.utils import simpleSplit
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
@@ -110,6 +111,57 @@ def _wrap(text: str, font: str, size: int, width: int) -> list[str]:
     return simpleSplit(text, font, size, width)
 
 
+# Glow anchors — rotated per slide so the deck doesn't feel like one flat template
+_GLOW_SPOTS = [
+    (SIZE * 0.82, SIZE * 0.84),
+    (SIZE * 0.14, SIZE * 0.24),
+    (SIZE * 0.90, SIZE * 0.30),
+    (SIZE * 0.20, SIZE * 0.86),
+]
+
+
+def _glow(c: canvas.Canvas, cx: float, cy: float, radius: float,
+          rgb=ACCENT, steps: int = 52, per_ring: float = 0.011):
+    """
+    Soft radial glow built from stacked translucent circles.
+
+    PDF shading patterns ignore alpha, so a real radialGradient renders as a
+    solid blob. Stacking low-alpha circles gives a genuine falloff instead.
+    """
+    for i in range(steps):
+        t = i / steps                       # 0 = outermost ring
+        c.setFillColor(Color(*rgb, alpha=per_ring))
+        c.circle(cx, cy, radius * (1 - t), fill=1, stroke=0)
+
+
+def _paint_bg(c: canvas.Canvas, index: int = 0):
+    """Black base + soft accent glow + dot grid + corner rules."""
+    # base
+    c.setFillColorRGB(*BG)
+    c.rect(0, 0, SIZE, SIZE, fill=1, stroke=0)
+
+    # soft accent glow, anchored somewhere different on each slide
+    gx, gy = _GLOW_SPOTS[index % len(_GLOW_SPOTS)]
+    _glow(c, gx, gy, SIZE * 0.58)
+
+    # fine dot grid for texture
+    c.setFillColor(Color(1, 1, 1, alpha=0.045))
+    step = 54
+    for x in range(step, SIZE, step):
+        for y in range(step, SIZE, step):
+            c.circle(x, y, 1.5, fill=1, stroke=0)
+
+    # hairline corner rules
+    c.setStrokeColor(Color(1, 1, 1, alpha=0.10))
+    c.setLineWidth(1)
+    c.line(SIZE - MARGIN, SIZE - MARGIN + 40, SIZE - MARGIN, SIZE - MARGIN - 40)
+    c.line(MARGIN - 40, MARGIN, MARGIN + 40, MARGIN)
+
+    # alpha lives in the graphics state — reset it or every later draw inherits it
+    c.setFillAlpha(1)
+    c.setStrokeAlpha(1)
+
+
 def _draw_slide_number(c: canvas.Canvas, n: int, total: int):
     c.setFillColorRGB(*MUTED)
     c.setFont("Helvetica", 26)
@@ -130,12 +182,8 @@ def render_pdf(data: dict, path: str) -> str:
     c = canvas.Canvas(path, pagesize=(SIZE, SIZE))
     content_w = SIZE - (MARGIN * 2)
 
-    def bg():
-        c.setFillColorRGB(*BG)
-        c.rect(0, 0, SIZE, SIZE, fill=1, stroke=0)
-
     # ── Cover slide ──
-    bg()
+    _paint_bg(c, 0)
     c.setFillColorRGB(*ACCENT)
     c.rect(MARGIN, SIZE - MARGIN - 12, 110, 12, fill=1, stroke=0)
 
@@ -161,7 +209,13 @@ def render_pdf(data: dict, path: str) -> str:
 
     # ── Content slides ──
     for i, s in enumerate(slides, start=1):
-        bg()
+        _paint_bg(c, i)
+
+        # oversized ghosted numeral, bleeding off the right edge
+        c.setFillColor(Color(1, 1, 1, alpha=0.05))
+        c.setFont("Helvetica-Bold", 460)
+        c.drawRightString(SIZE + 40, 90, str(i))
+        c.setFillAlpha(1)
 
         # accent number badge
         c.setFillColorRGB(*ACCENT)
@@ -195,7 +249,7 @@ def render_pdf(data: dict, path: str) -> str:
         c.showPage()
 
     # ── CTA slide ──
-    bg()
+    _paint_bg(c, len(slides) + 1)
     cta_lines = _wrap(data["cta"], "Helvetica-Bold", 72, content_w)
     block_h = len(cta_lines) * 86 + 110
     y = (SIZE + block_h) / 2
