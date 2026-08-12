@@ -23,6 +23,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import Color
 from reportlab.lib.utils import simpleSplit
 
+from topic_rotation import pick_topic as rotate
+
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
@@ -32,6 +34,8 @@ client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 # probe for a live version (POST initializeUpload against 2026xx candidates) and
 # bump this. Verified active: 202508, 202503, 202502.
 LINKEDIN_VERSION = "202508"
+
+LOG_FILE = "data/carousel_log.json"
 
 # ── DESIGN TOKENS ───────────────────────────────────────────
 SIZE = 1080                      # square carousel, best mobile fill
@@ -59,9 +63,8 @@ CAROUSEL_POOL = [
 
 
 def pick_topic() -> dict:
-    """Rotate through the pool by week number."""
-    week = datetime.now().isocalendar()[1]
-    return CAROUSEL_POOL[week % len(CAROUSEL_POOL)]
+    """Next unused carousel topic, based on what has actually been published."""
+    return rotate(CAROUSEL_POOL, LOG_FILE)
 
 
 # ── CONTENT GENERATION ──────────────────────────────────────
@@ -384,7 +387,7 @@ def post_carousel(pdf_path: str, caption: str, title: str) -> bool:
 # ── LOGGING ─────────────────────────────────────────────────
 
 def save_log(topic: str, data: dict, success: bool):
-    log_file = "data/carousel_log.json"
+    log_file = LOG_FILE
     os.makedirs("data", exist_ok=True)
 
     logs = []

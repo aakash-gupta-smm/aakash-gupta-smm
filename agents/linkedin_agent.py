@@ -11,11 +11,15 @@ import requests
 from datetime import datetime
 import anthropic
 
+from topic_rotation import pick_topic as rotate
+
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 LINKEDIN_ACCESS_TOKEN = os.environ["LINKEDIN_ACCESS_TOKEN"]
 LINKEDIN_PERSON_URN = os.environ["LINKEDIN_PERSON_URN"]  # urn:li:person:XXXX
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+
+LOG_FILE = "data/linkedin_log.json"
 
 # ── CONTENT TOPICS ──────────────────────────────────────────
 # Rotates through these so posts stay varied
@@ -61,12 +65,8 @@ TOPIC_POOL = [
 
 
 def pick_topic() -> dict:
-    """Pick a topic — rotate through pool based on week number."""
-    week = datetime.now().isocalendar()[1]
-    day = datetime.now().weekday()  # 0=Mon, 2=Wed, 4=Fri
-    slot = {0: 0, 2: 1, 4: 2}.get(day, 0)
-    index = (week * 3 + slot) % len(TOPIC_POOL)
-    return TOPIC_POOL[index]
+    """Next unused topic, based on what has actually been published."""
+    return rotate(TOPIC_POOL, LOG_FILE)
 
 
 def generate_linkedin_post(topic: str, pillar: str, post_type: str) -> str:
@@ -152,7 +152,7 @@ def post_to_linkedin(post_text: str) -> bool:
 
 def save_post_log(topic: str, post_text: str, success: bool):
     """Save post to log file for dashboard."""
-    log_file = "data/linkedin_log.json"
+    log_file = LOG_FILE
     os.makedirs("data", exist_ok=True)
 
     logs = []
