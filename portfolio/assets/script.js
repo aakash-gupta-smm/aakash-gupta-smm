@@ -22,29 +22,18 @@ if (FINE_POINTER) {
     gsap.to(follower, { x: e.clientX, y: e.clientY, duration: 0.18, ease: 'power2.out' });
   });
 
-  const hoverables = 'a, button, .skill-card, .project-card, .contact-card, .about-card, .timeline-content';
+  const hoverables = 'a, button, .case-card, .service-card, .contact-card, .step, .timeline-content';
   document.querySelectorAll(hoverables).forEach(el => {
     el.addEventListener('mouseenter', () => {
-      gsap.to(follower, { scale: 2.2, borderColor: 'rgba(124,106,247,0.75)', duration: 0.25 });
+      gsap.to(follower, { scale: 2.2, borderColor: 'rgba(255,91,4,0.85)', duration: 0.25 });
       gsap.to(cursor, { scale: 0.4, duration: 0.25 });
     });
     el.addEventListener('mouseleave', () => {
-      gsap.to(follower, { scale: 1, borderColor: 'rgba(124,106,247,0.35)', duration: 0.25 });
+      gsap.to(follower, { scale: 1, borderColor: 'rgba(255,255,255,0.35)', duration: 0.25 });
       gsap.to(cursor, { scale: 1, duration: 0.25 });
     });
   });
 }
-
-/* ── SPOTLIGHT CARDS ──────────────────────────────────────── */
-/* Feeds the cursor position to the CSS radial gradients as --mx/--my. */
-function bindSpotlight(el) {
-  el.addEventListener('pointermove', (e) => {
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--my', `${e.clientY - r.top}px`);
-  });
-}
-document.querySelectorAll('.spotlight').forEach(bindSpotlight);
 
 /* ── MAGNETIC BUTTONS ─────────────────────────────────────── */
 if (FINE_POINTER && !REDUCED) {
@@ -75,16 +64,20 @@ gsap.timeline({ defaults: { ease: 'power4.out' } })
     { yPercent: 0, duration: 1.05, stagger: 0.11 }, 0.25)
   .fromTo('.hero-sub', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.75 }, 0.9)
   .fromTo('.hero-actions', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.75 }, 1.05)
-  .fromTo('.hero-photo', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1 }, 0.6)
-  .fromTo('.hero-stats .stat', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.12 }, 1.2)
+  .fromTo('.hero-statement', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.75 }, 0.95)
+  .fromTo('.hero-circle', { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 1.1 }, 0.4)
+  .fromTo('.hero-cutout', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, 0.6)
+  .fromTo('.pill', { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.5, stagger: 0.09 }, 1.1)
   .fromTo('.hero-scroll', { opacity: 0 }, { opacity: 1, duration: 0.8 }, 1.8);
 
 /* ── COUNTERS ─────────────────────────────────────────────── */
-document.querySelectorAll('.stat-num').forEach(el => {
+document.querySelectorAll('[data-count]').forEach(el => {
   const target = parseInt(el.dataset.count, 10);
+  const suffix = el.dataset.suffix ?? '';
   gsap.to({ v: 0 }, {
-    v: target, duration: 1.8, delay: 1.3, ease: 'power2.out',
-    onUpdate() { el.textContent = Math.round(this.targets()[0].v); }
+    v: target, duration: 1.6, ease: 'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 92%' },
+    onUpdate() { el.textContent = Math.round(this.targets()[0].v) + suffix; }
   });
 });
 
@@ -109,6 +102,8 @@ function staggerIn(items, trigger, vars = {}) {
     });
 }
 
+staggerIn('.step', '.steps');
+staggerIn('.service-card', '.services-grid');
 staggerIn('.timeline-item', '.timeline', { from: { x: -34, y: 0 }, to: { x: 0, y: 0, stagger: 0.16 } });
 staggerIn('.contact-card', '.contact-grid', { from: { x: -26, y: 0 }, to: { x: 0, y: 0 } });
 
@@ -125,7 +120,7 @@ if (tlProgress) {
 /* The old build animated '.hero::before' — GSAP cannot target pseudo-elements,
    so it silently did nothing. Parallax the real photo instead. */
 if (!REDUCED) {
-  gsap.to('.hero-photo', {
+  gsap.to('.hero-cutout', {
     yPercent: 14, ease: 'none',
     scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1.2 }
   });
@@ -159,7 +154,7 @@ async function loadCases() {
       const isPractice = p.kind === 'practice';
 
       const card = document.createElement('article');
-      card.className = 'case-card spotlight';
+      card.className = 'case-card';
       card.innerHTML = `
         <div class="case-head">
           ${p.client ? `<span class="case-client">${esc(p.client)}</span>` : ''}
@@ -187,7 +182,6 @@ async function loadCases() {
           p.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}`;
 
       grid.appendChild(card);
-      bindSpotlight(card);
 
       gsap.fromTo(card, { opacity: 0, y: 44 }, {
         opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
