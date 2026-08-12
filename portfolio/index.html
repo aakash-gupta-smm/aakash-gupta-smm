@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aakash Gupta — Social Media Manager & Brand Strategist</title>
-  <meta name="description" content="4+ years turning social media into measurable growth. Strategy, paid campaigns, content and brand management." />
+  <title>Aakash Gupta — Digital Marketing Manager</title>
+  <meta name="description" content="Digital Marketing Manager with 5+ years across Google Ads, Meta Ads, SEO and Shopify. Turning ad spend into measurable revenue for Indian SMEs and e-commerce brands." />
+  <meta property="og:title" content="Aakash Gupta — Digital Marketing Manager" />
+  <meta property="og:description" content="Google Ads · Meta Ads · SEO · Shopify. 5+ years, 20+ brands." />
+  <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="progress" id="progress"></div>
+
+  <!-- AMBIENT LAYERS -->
+  <div class="aurora" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
 
   <!-- CURSOR -->
   <div class="cursor" id="cursor"></div>
@@ -17,44 +32,48 @@
 
   <!-- NAV -->
   <nav class="nav" id="nav">
-    <div class="nav-logo">AG</div>
+    <a href="#hero" class="nav-logo">AG</a>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
+      <li><a href="#skills">Expertise</a></li>
       <li><a href="#work">Work</a></li>
+      <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="mailto:akashgupta8163@gmail.com" class="nav-cta">Let's Talk</a>
+    <a href="mailto:akashgupta8163@gmail.com" class="nav-cta magnetic">Let's Talk</a>
   </nav>
 
   <!-- HERO -->
   <section class="hero" id="hero">
-    <div class="hero-noise"></div>
     <div class="hero-content">
-      <div class="hero-tag reveal">Available for freelance & full-time</div>
+      <div class="hero-tag reveal">
+        <span class="pulse"></span>
+        Available for freelance &amp; full-time
+      </div>
       <h1 class="hero-title">
-        <span class="reveal-line">I turn social</span>
-        <span class="reveal-line accent">media into</span>
-        <span class="reveal-line">measurable</span>
-        <span class="reveal-line accent">growth.</span>
+        <span class="line"><span class="line-inner">I turn ad spend</span></span>
+        <span class="line"><span class="line-inner accent">into revenue.</span></span>
+        <span class="line"><span class="line-inner">Not impressions.</span></span>
       </h1>
-      <p class="hero-sub reveal">Social Media Manager · Brand Strategist · Helping Brands Grow Through Content, Community & Paid Media</p>
+      <p class="hero-sub reveal">
+        Digital Marketing Manager · Google Ads, Meta Ads, SEO &amp; Shopify ·
+        5+ years building growth for 20+ brands
+      </p>
       <div class="hero-actions reveal">
-        <a href="#work" class="btn-primary">See My Work</a>
-        <a href="#contact" class="btn-ghost">Get In Touch</a>
+        <a href="#work" class="btn-primary magnetic">See My Work</a>
+        <a href="#contact" class="btn-ghost magnetic">Get In Touch</a>
       </div>
     </div>
+
     <div class="hero-photo reveal">
       <div class="hero-photo-ring"></div>
+      <div class="hero-photo-glow"></div>
       <img src="assets/aakash.png" alt="Aakash Gupta" />
     </div>
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="scroll-line"></div>
-    </div>
+
     <div class="hero-stats">
       <div class="stat reveal">
-        <span class="stat-num" data-count="4">0</span><span class="stat-plus">+</span>
+        <span class="stat-num" data-count="5">0</span><span class="stat-plus">+</span>
         <span class="stat-label">Years Experience</span>
       </div>
       <div class="stat reveal">
@@ -66,26 +85,38 @@
         <span class="stat-label">Industries</span>
       </div>
     </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
   </section>
 
   <!-- MARQUEE -->
   <div class="marquee-wrapper">
     <div class="marquee">
-      <span>Social Media Strategy</span><span class="dot">·</span>
-      <span>Meta Ads</span><span class="dot">·</span>
-      <span>Instagram Growth</span><span class="dot">·</span>
-      <span>Brand Positioning</span><span class="dot">·</span>
-      <span>Content Creation</span><span class="dot">·</span>
-      <span>Paid Campaigns</span><span class="dot">·</span>
-      <span>SEO</span><span class="dot">·</span>
-      <span>Shopify</span><span class="dot">·</span>
-      <span>WordPress</span><span class="dot">·</span>
-      <span>Google Ads</span><span class="dot">·</span>
-      <span>Social Media Strategy</span><span class="dot">·</span>
-      <span>Meta Ads</span><span class="dot">·</span>
-      <span>Instagram Growth</span><span class="dot">·</span>
-      <span>Brand Positioning</span><span class="dot">·</span>
-      <span>Content Creation</span><span class="dot">·</span>
+      <div class="marquee-track">
+        <span>Google Ads</span><span class="dot">◆</span>
+        <span>Meta Ads</span><span class="dot">◆</span>
+        <span>Performance Marketing</span><span class="dot">◆</span>
+        <span>SEO</span><span class="dot">◆</span>
+        <span>Shopify</span><span class="dot">◆</span>
+        <span>Conversion Optimisation</span><span class="dot">◆</span>
+        <span>WordPress</span><span class="dot">◆</span>
+        <span>Social Media Strategy</span><span class="dot">◆</span>
+        <span>Content &amp; Brand</span><span class="dot">◆</span>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <span>Google Ads</span><span class="dot">◆</span>
+        <span>Meta Ads</span><span class="dot">◆</span>
+        <span>Performance Marketing</span><span class="dot">◆</span>
+        <span>SEO</span><span class="dot">◆</span>
+        <span>Shopify</span><span class="dot">◆</span>
+        <span>Conversion Optimisation</span><span class="dot">◆</span>
+        <span>WordPress</span><span class="dot">◆</span>
+        <span>Social Media Strategy</span><span class="dot">◆</span>
+        <span>Content &amp; Brand</span><span class="dot">◆</span>
+      </div>
     </div>
   </div>
 
@@ -97,57 +128,64 @@
         <div class="about-left">
           <h2 class="section-title reveal">
             Strategy-first.<br/>
-            <span class="accent">Results-obsessed.</span>
+            <span class="accent">Numbers-obsessed.</span>
           </h2>
-          <div class="about-card reveal">
+
+          <div class="about-card spotlight reveal">
             <div class="about-card-icon">📍</div>
             <div>
               <strong>Ghaziabad, India</strong>
-              <span>Open to remote & hybrid</span>
+              <span>Open to remote &amp; hybrid</span>
             </div>
           </div>
-          <div class="about-card reveal">
-            <div class="about-card-icon">🎓</div>
-            <div>
-              <strong>Digital Marketing with AI</strong>
-              <span>WordPress · SEO · Shopify · Paid Ads</span>
-            </div>
-          </div>
-          <div class="about-card reveal">
+          <div class="about-card spotlight reveal">
             <div class="about-card-icon">💼</div>
             <div>
               <strong>Assert IT Solutions</strong>
-              <span>Social Media Manager · Jul 2025 – Present</span>
+              <span>Digital marketing · Jul 2025 – Present</span>
             </div>
           </div>
-          <div class="about-card reveal">
-            <div class="about-card-icon">👥</div>
+          <div class="about-card spotlight reveal">
+            <div class="about-card-icon">🎯</div>
+            <div>
+              <strong>Google Ads · Meta Ads · SEO</strong>
+              <span>Full-funnel performance marketing</span>
+            </div>
+          </div>
+          <div class="about-card spotlight reveal">
+            <div class="about-card-icon">🔗</div>
             <div>
               <strong>1,226 Followers · 500+ Connections</strong>
               <span>linkedin.com/in/aakashguptadm</span>
             </div>
           </div>
         </div>
+
         <div class="about-right">
           <p class="about-bio reveal">
-            I've spent 4+ years helping brands cut through the noise on social media — building audiences, managing campaigns, and turning content into measurable growth.
+            Most businesses don't have a traffic problem. They have a conversion problem.
           </p>
           <p class="about-bio reveal">
-            Currently managing social media strategy at Assert IT Solutions, I've worked across <span class="accent">education, logistics, e-commerce, and tech</span> — running everything from Instagram ad campaigns to full-scale brand positioning projects.
+            I've spent 5+ years helping brands work out which one they actually have — running
+            paid campaigns, fixing what happens after the click, and building the tracking that
+            tells you whether any of it worked. Across <span class="accent">tech, e-commerce,
+            education and logistics</span>.
           </p>
           <p class="about-bio reveal">
-            Whether you're a brand looking to grow your online presence, a startup building from zero, or a company searching for a social media lead — let's talk.
+            I don't just run ads. I own the funnel that turns the click into a customer.
           </p>
+
           <div class="about-bullets reveal">
-            <div class="about-bullet">→ Build and execute social media strategies from scratch</div>
-            <div class="about-bullet">→ Run paid campaigns on Meta & Instagram (lead gen + awareness)</div>
-            <div class="about-bullet">→ Create content calendars, copy, and creatives that convert</div>
-            <div class="about-bullet">→ Manage brand voice across multiple platforms simultaneously</div>
-            <div class="about-bullet">→ Analyse performance data and pivot strategies based on results</div>
+            <div class="about-bullet">Plan and run Google Ads &amp; Meta Ads campaigns end to end</div>
+            <div class="about-bullet">Build and optimise Shopify stores and WordPress landing pages</div>
+            <div class="about-bullet">Handle technical SEO, on-page and local search visibility</div>
+            <div class="about-bullet">Set up conversion tracking and report on what actually drives revenue</div>
+            <div class="about-bullet">Build AI-powered systems that automate content and reporting</div>
           </div>
+
           <div class="about-open reveal">
             <span class="open-dot"></span>
-            Open to full-time roles, freelance projects & collaborations
+            Open to full-time Digital Marketing Manager roles &amp; freelance projects
           </div>
         </div>
       </div>
@@ -158,52 +196,69 @@
   <section class="skills section" id="skills">
     <div class="container">
       <div class="section-tag reveal">What I Do</div>
-      <h2 class="section-title reveal">Skills & <span class="accent">Expertise</span></h2>
+      <h2 class="section-title reveal">Skills &amp; <span class="accent">Expertise</span></h2>
       <div class="skills-grid">
-        <div class="skill-card reveal">
-          <div class="skill-icon">📱</div>
-          <h3>Social Media Marketing</h3>
-          <p>End-to-end social media strategy — content calendars, brand voice, community management, and audience growth across Instagram, LinkedIn, and Facebook.</p>
-        </div>
-        <div class="skill-card reveal">
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">01</div>
           <div class="skill-icon">🎯</div>
-          <h3>Paid Advertising</h3>
-          <p>Meta Ads and Instagram Advertising for lead generation and brand awareness. Performance campaigns with data-driven optimisation and reporting.</p>
+          <h3>Paid Media</h3>
+          <p>Google Ads across Search, Performance Max and Shopping, plus Meta Ads. Campaign structure, bid strategy, budget pacing, and knowing when to scale versus when to kill.</p>
+          <div class="skill-tags"><span>Google Ads</span><span>Meta Ads</span><span>PPC</span></div>
         </div>
-        <div class="skill-card reveal">
-          <div class="skill-icon">✍️</div>
-          <h3>Content Strategy & Copy</h3>
-          <p>Scroll-stopping captions, creative direction, and content that converts. Skilled in creative writing, copywriting, and digital content creation.</p>
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">02</div>
+          <div class="skill-icon">🔍</div>
+          <h3>SEO &amp; Organic</h3>
+          <p>Technical and on-page SEO, content strategy, Google Business Profile and local search. Building visibility that doesn't disappear when the ad budget pauses.</p>
+          <div class="skill-tags"><span>Technical SEO</span><span>On-Page</span><span>Local</span></div>
         </div>
-        <div class="skill-card reveal">
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">03</div>
+          <div class="skill-icon">🛍️</div>
+          <h3>E-commerce &amp; Web</h3>
+          <p>Shopify store builds and WordPress landing pages designed to convert, not just to look good. Product listings, site structure, and closing the gap between traffic and checkout.</p>
+          <div class="skill-tags"><span>Shopify</span><span>WordPress</span><span>CRO</span></div>
+        </div>
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">04</div>
           <div class="skill-icon">📊</div>
-          <h3>Social Media Analytics</h3>
-          <p>Performance tracking and reporting using Meta Business Suite and analytics platforms. Pivot strategies based on real data and measurable results.</p>
+          <h3>Analytics &amp; Reporting</h3>
+          <p>Conversion tracking, campaign measurement and performance reporting. Turning platform data into decisions a business owner can actually act on.</p>
+          <div class="skill-tags"><span>Meta Pixel</span><span>Reporting</span><span>Attribution</span></div>
         </div>
-        <div class="skill-card reveal">
-          <div class="skill-icon">🌐</div>
-          <h3>Digital Marketing</h3>
-          <p>Full-funnel digital marketing including SEO, SMO, and paid media. Currently expanding into WordPress, Shopify, and Google Ads.</p>
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">05</div>
+          <div class="skill-icon">📱</div>
+          <h3>Social &amp; Content</h3>
+          <p>Content strategy, brand voice and community across Instagram, LinkedIn and Facebook. Four years of building audiences that actually engage.</p>
+          <div class="skill-tags"><span>Strategy</span><span>Content</span><span>Community</span></div>
         </div>
-        <div class="skill-card reveal">
+
+        <div class="skill-card spotlight">
+          <div class="skill-num">06</div>
           <div class="skill-icon">🤖</div>
           <h3>AI-Powered Marketing</h3>
-          <p>Using AI tools to scale content production, automate marketing workflows, and build smarter systems — currently studying Digital Marketing with AI.</p>
+          <p>I build automation systems that handle content production, publishing and reporting — so the team spends its time on strategy instead of admin.</p>
+          <div class="skill-tags"><span>Automation</span><span>Workflows</span><span>AI Tools</span></div>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- WORK / PROJECTS -->
+  <!-- WORK -->
   <section class="work section" id="work">
     <div class="container">
       <div class="section-tag reveal">Portfolio</div>
       <h2 class="section-title reveal">Selected <span class="accent">Work</span></h2>
-      <div class="projects-grid" id="projects-grid">
-        <!-- Populated from portfolio.json by script.js -->
-      </div>
+      <div class="projects-grid" id="projects-grid"></div>
       <div class="work-empty reveal" id="work-empty" style="display:none;">
-        <p>Projects coming soon — currently building case studies.</p>
+        <p>Case studies coming soon.</p>
       </div>
     </div>
   </section>
@@ -214,54 +269,60 @@
       <div class="section-tag reveal">Experience</div>
       <h2 class="section-title reveal">Where I've <span class="accent">Worked</span></h2>
       <div class="timeline">
-        <div class="timeline-item reveal">
+        <div class="timeline-line"><span class="timeline-progress" id="timeline-progress"></span></div>
+
+        <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <div class="timeline-meta">Jul 2025 – Present · 1 yr · On-site · Ghaziabad</div>
+          <div class="timeline-content spotlight">
+            <div class="timeline-meta">Jul 2025 – Present · On-site · Ghaziabad</div>
             <h3>Social Media Manager</h3>
             <h4>Assert IT Solutions</h4>
-            <p>Managing end-to-end social media strategy for multiple client brands across education, logistics, and B2B sectors. Building AI-powered content automation systems and driving measurable brand growth across platforms.</p>
+            <p>Own end-to-end digital marketing for multiple client brands across education, logistics, e-commerce and B2B. Plan and run Google Ads and Meta Ads campaigns, handle SEO and local search, build Shopify stores and WordPress landing pages, and report performance to stakeholders. Built AI-powered automation systems for content production and reporting.</p>
             <div class="timeline-tags">
-              <span>Social Media</span><span>Instagram Advertising</span><span>Strategy</span><span>AI Automation</span><span>B2B</span>
+              <span>Google Ads</span><span>Meta Ads</span><span>SEO</span><span>Shopify</span><span>AI Automation</span>
             </div>
           </div>
         </div>
-        <div class="timeline-item reveal">
+
+        <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-content">
+          <div class="timeline-content spotlight">
             <div class="timeline-meta">Jul 2023 – Jul 2025 · 2 yrs 1 mo · On-site · Noida</div>
             <h3>Social Media Marketing Manager</h3>
             <h4>GrowthTrack Info Tech Private Limited</h4>
-            <p>Led social media marketing operations across 2+ years, managing strategy, content, and paid media for the company. Oversaw full campaign lifecycle from planning to performance reporting.</p>
+            <p>Led marketing operations across 2+ years — strategy, content and paid media. Owned the full campaign lifecycle from planning through to performance reporting.</p>
             <div class="timeline-tags">
-              <span>Marketing Strategy</span><span>Paid Media</span><span>Content</span><span>Communication</span>
+              <span>Marketing Strategy</span><span>Paid Media</span><span>Content</span>
             </div>
           </div>
         </div>
-        <div class="timeline-item reveal">
+
+        <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-content">
+          <div class="timeline-content spotlight">
             <div class="timeline-meta">Nov 2021 – Jul 2023 · 1 yr 9 mos · India</div>
             <h3>Digital Marketing Manager</h3>
             <h4>Unibask Technologies Private Limited</h4>
-            <p>Managed digital marketing operations including SEO, social media, and paid advertising. Planned and executed performance marketing campaigns using Instagram Advertising and other paid channels.</p>
+            <p>Managed digital marketing operations including SEO, social media and paid advertising. Planned and executed performance marketing campaigns across paid channels.</p>
             <div class="timeline-tags">
-              <span>Digital Marketing</span><span>SEO</span><span>Instagram Ads</span><span>Performance Marketing</span>
+              <span>Digital Marketing</span><span>SEO</span><span>Performance Marketing</span>
             </div>
           </div>
         </div>
-        <div class="timeline-item reveal">
+
+        <div class="timeline-item">
           <div class="timeline-dot"></div>
-          <div class="timeline-content">
+          <div class="timeline-content spotlight">
             <div class="timeline-meta">Sep 2021 – Nov 2021 · 3 mos · Internship</div>
             <h3>Social Media Marketing Intern</h3>
             <h4>Rigi</h4>
-            <p>Assisted in managing Rigi's social media presence across Facebook and Instagram. Supported creation and scheduling of content to drive creator community engagement.</p>
+            <p>Supported Rigi's social presence across Facebook and Instagram — content creation and scheduling to drive creator community engagement.</p>
             <div class="timeline-tags">
-              <span>Facebook</span><span>Instagram</span><span>Content Creation</span><span>Community</span>
+              <span>Facebook</span><span>Instagram</span><span>Content</span>
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -271,9 +332,12 @@
     <div class="container">
       <div class="section-tag reveal">Get In Touch</div>
       <h2 class="section-title reveal">Let's <span class="accent">Work Together</span></h2>
-      <p class="contact-sub reveal">Open to freelance projects, full-time roles and collaborations.</p>
+      <p class="contact-sub reveal">
+        If your ad spend isn't turning into revenue, or your store gets traffic that doesn't
+        convert — let's talk.
+      </p>
       <div class="contact-grid">
-        <a href="mailto:akashgupta8163@gmail.com" class="contact-card reveal">
+        <a href="mailto:akashgupta8163@gmail.com" class="contact-card spotlight">
           <div class="contact-card-icon">📩</div>
           <div>
             <strong>Email</strong>
@@ -281,19 +345,19 @@
           </div>
           <div class="contact-arrow">→</div>
         </a>
-        <a href="https://linkedin.com/in/aakashguptadm" target="_blank" class="contact-card reveal">
+        <a href="https://linkedin.com/in/aakashguptadm" target="_blank" rel="noopener" class="contact-card spotlight">
           <div class="contact-card-icon">💼</div>
           <div>
             <strong>LinkedIn</strong>
-            <span>Connect with me</span>
+            <span>linkedin.com/in/aakashguptadm</span>
           </div>
           <div class="contact-arrow">→</div>
         </a>
-        <a href="mailto:akashgupta8163@gmail.com" class="contact-card reveal">
+        <a href="mailto:akashgupta8163@gmail.com?subject=Freelance%20Project" class="contact-card spotlight">
           <div class="contact-card-icon">🤝</div>
           <div>
             <strong>Freelance</strong>
-            <span>Available for projects</span>
+            <span>Google Ads · Meta Ads · Shopify</span>
           </div>
           <div class="contact-arrow">→</div>
         </a>
@@ -306,7 +370,7 @@
     <div class="container">
       <div class="footer-top">
         <div class="footer-logo">AG</div>
-        <p>Aakash Gupta · Social Media Manager & Brand Strategist</p>
+        <p>Aakash Gupta · Digital Marketing Manager</p>
       </div>
       <div class="footer-bottom">
         <span>© 2026 Aakash Gupta</span>
@@ -317,6 +381,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
   <script src="assets/script.js"></script>
 </body>
 </html>

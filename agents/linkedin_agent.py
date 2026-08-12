@@ -58,7 +58,7 @@ TOPIC_POOL = [
     {"topic": "How I use AI to cut my campaign reporting time by 70%", "pillar": "ai", "type": "tools"},
 
     # Career / Personal Brand
-    {"topic": "4 years in marketing — what I wish I knew before running my first paid campaign", "pillar": "career", "type": "personal"},
+    {"topic": "5 years in marketing — what I wish I knew before running my first paid campaign", "pillar": "career", "type": "personal"},
     {"topic": "Why I'm expanding from social media to full-stack digital marketing in 2026", "pillar": "career", "type": "personal"},
     {"topic": "What no one tells you about becoming a Digital Marketing Manager in India", "pillar": "career", "type": "personal"},
 ]
@@ -66,7 +66,7 @@ TOPIC_POOL = [
 
 PILLARS = ["google-ads", "meta-ads", "shopify", "seo", "strategy", "ai", "analytics", "career"]
 
-PROFILE = """- Digital Marketing Manager, 4+ years, based in Ghaziabad, India
+PROFILE = """- Digital Marketing Manager, 5+ years, based in Ghaziabad, India
 - Hands-on with Google Ads, Meta Ads, SEO, Shopify, social media
 - Has worked with 20+ brands across tech, e-commerce, education and logistics
 - Targets Indian SMEs and e-commerce brands
@@ -99,7 +99,7 @@ PILLAR: {pillar}
 TYPE: {post_type}
 
 About Aakash:
-- 4+ years experience in digital marketing — social media, paid ads, SEO, and e-commerce
+- 5+ years experience in digital marketing — social media, paid ads, SEO, and e-commerce
 - Currently working as Digital Marketing Manager at Assert IT Solutions
 - Hands-on experience with Google Ads, Meta Ads, Shopify, SEO, and content strategy
 - Has worked across tech, e-commerce, education and logistics sectors

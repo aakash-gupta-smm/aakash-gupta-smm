@@ -185,7 +185,7 @@ def build_brief(items: list[dict]) -> dict:
     prompt = f"""You are preparing a daily LinkedIn engagement brief for Aakash Gupta.
 
 ABOUT AAKASH
-- Digital Marketing Manager, 4+ years, based in Ghaziabad, India
+- Digital Marketing Manager, 5+ years, based in Ghaziabad, India
 - Hands-on with Google Ads, Meta Ads, SEO, Shopify, social media
 - Works with Indian SMEs and e-commerce brands
 - Goal: grow LinkedIn reach, attract freelance work (Google Ads / Meta Ads / Shopify),

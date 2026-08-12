@@ -64,7 +64,7 @@ CAROUSEL_POOL = [
 
 PILLARS = ["google-ads", "meta-ads", "shopify", "seo", "strategy", "ai", "analytics"]
 
-PROFILE = """- Digital Marketing Manager, 4+ years, based in Ghaziabad, India
+PROFILE = """- Digital Marketing Manager, 5+ years, based in Ghaziabad, India
 - Hands-on with Google Ads, Meta Ads, SEO, Shopify, social media
 - Has worked with 20+ brands across tech, e-commerce, education and logistics
 - Targets Indian SMEs and e-commerce brands"""
@@ -97,7 +97,7 @@ TOPIC: {topic}
 PILLAR: {pillar}
 
 About Aakash:
-- 4+ years in digital marketing — Google Ads, Meta Ads, SEO, Shopify, social media
+- 5+ years in digital marketing — Google Ads, Meta Ads, SEO, Shopify, social media
 - Digital Marketing Manager at Assert IT Solutions
 - Works with Indian SMEs and e-commerce brands
 - Open to freelance projects and full-time Digital Marketing Manager roles

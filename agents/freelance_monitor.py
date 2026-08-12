@@ -140,11 +140,10 @@ JOB: {job_title} at {company}
 DESCRIPTION: {description}
 
 About Aakash Gupta:
-- Social Media Manager with 4+ years experience
-- Manages social media at Assert IT Solutions
-- Experience in Meta Ads, Instagram growth, brand strategy
-- Worked across tech, e-commerce, education, logistics
-- Currently expanding skills in SEO, WordPress, Shopify, Google Ads
+- Digital Marketing Manager with 5+ years experience
+- Currently runs digital marketing at Assert IT Solutions
+- Hands-on with Google Ads, Meta Ads, SEO, Shopify and WordPress
+- Has worked with 20+ brands across tech, e-commerce, education, logistics
 - Based in Ghaziabad, open to remote work
 - Email: akashgupta8163@gmail.com
 
