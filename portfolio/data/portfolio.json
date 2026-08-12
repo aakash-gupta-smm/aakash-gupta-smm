@@ -1,31 +1,58 @@
 {
-  "last_updated": "2026-07-01",
+  "last_updated": "2026-08-12",
+  "_schema": "Case studies use problem / approach / outcome. `metrics` renders as the stat strip on the card — keep it to 3 entries. `kind` is 'client' for paid work and 'practice' for course/self-directed builds; practice projects are labelled as such on the site so nothing reads as client work that isn't.",
   "projects": [
     {
-      "title": "Built AI-Niche Blog Website on WordPress",
-      "category": "Course Assignment",
-      "emoji": "📝",
-      "description": "Built 'Future of Work AI', a blog website from scratch on WordPress using Elementor, covering AI's impact on careers and industries. Configured SEO-friendly permalink structure, published 3 in-depth articles, and set up a fully functional homepage, blog, and contact page.",
-      "highlights": [
-        "Set up WordPress dashboard, plugins (Elementor, WPForms), pages and posts from scratch",
-        "Chose 'Post Name' permalink structure for clean, SEO-friendly URLs",
-        "Diagnosed and resolved a domain hosting redirect issue independently"
+      "title": "Cut cost per purchase by 76% on a ₹399 product",
+      "client": "GlowYug",
+      "category": "Meta Ads",
+      "kind": "client",
+      "emoji": "📉",
+      "metrics": [
+        { "value": "₹506 → ₹118", "label": "Cost per purchase" },
+        { "value": "3.4x", "label": "ROAS vs 1.4x break-even" },
+        { "value": "₹0", "label": "Extra ad spend" }
       ],
-      "tools": ["WordPress", "Elementor", "WPForms", "SEO"],
-      "date": "May 2026"
+      "problem": "GlowYug, a D2C face yoga brand selling a ₹399 digital product, was spending ₹30,000 a month on Meta Ads across 22 campaigns and 31 ad sets. At that price point the account needed a ₹200 cost per purchase just to break even once management cost was included — it was running at more than double that. Budget was spread so thin that no ad set had enough data to optimise against.",
+      "approach": "Audited every ad set against the actual unit economics instead of platform benchmarks. Meta was labelling ad sets \"high-performing\" that lost money on a ₹399 product — it compares ad sets to each other, not to your price. Cut everything that couldn't clear a ₹200 CPA across two clean days, kept the two audience angles that could, and held budgets flat through the learning phase instead of reacting to partial-day numbers. Also tested retargeting and shut it down when the data didn't support it.",
+      "outcome": "Cost per purchase dropped from ₹506 to ₹118 as the learning phase completed — roughly 3.4x ROAS against a 1.4x break-even. The account went from losing the client money to profitable, with no increase in ad spend.",
+      "tools": ["Meta Ads", "Conversion Tracking", "Unit Economics"],
+      "date": "August 2026"
     },
     {
-      "title": "Built E-commerce Store on Shopify (UrbanEdge Store)",
-      "category": "Shopify",
-      "emoji": "🛍️",
-      "description": "Built an e-commerce Shopify store for men's fashion accessories from scratch, covering dashboard setup, product listings, and store structure. Focused on product listing best practices and the role of the About Us page in building trust with ad platforms.",
-      "highlights": [
-        "Structured product listings with compelling titles, HTML descriptions, compare-at pricing, and SEO tags",
-        "Learned how Google and Meta use the About Us page to vet ad account legitimacy",
-        "Mapped out future enhancements: custom domain, collections, shipping/payment setup, theme branding"
+      "title": "Took organic reel reach from 3K to 22K",
+      "client": "IPEM Group of Institutions",
+      "category": "Social Media",
+      "kind": "client",
+      "emoji": "📈",
+      "metrics": [
+        { "value": "3K → 22K", "label": "Reel reach" },
+        { "value": "100%", "label": "Organic, no paid push" },
+        { "value": "5/week", "label": "Publishing cadence" }
       ],
-      "tools": ["Shopify", "E-commerce", "Product Listing", "SEO"],
-      "date": "May 2026"
+      "problem": "A 30-year-old institution had published 1,991 posts and had 2,167 followers — roughly one follower per post. High output, no strategy: static-heavy content, no Reels, and engagement low enough that the algorithm had stopped distributing the account.",
+      "approach": "Rebuilt the content strategy around Reels at 60–70% of output, on a fixed five-posts-a-week cadence built for the admission season. Worked around a real constraint — students were off-campus, so the usual student-led content wasn't possible — by leaning on faculty testimonials, cinematic campus b-roll and kinetic-typography stat reels. Rebuilt the grid so the profile people land on after a reel actually holds up. Built an automated system that generates the weekly calendar, briefs the video and design team, and routes every post through an approval loop before publishing.",
+      "outcome": "Reels that were reaching 2,300–3,000 people are now reaching 11,000–22,000 — entirely organic, with no paid promotion. Live since June 2026 and running through the admission season.",
+      "tools": ["Instagram", "Content Strategy", "Reels", "Automation"],
+      "date": "June 2026 – present"
+    },
+    {
+      "title": "Built a lead-gen Search campaign from zero",
+      "client": "Assert IT Solutions",
+      "category": "Google Ads",
+      "kind": "client",
+      "emoji": "🎯",
+      "metrics": [
+        { "value": "13", "label": "Curated keywords" },
+        { "value": "₹300/day", "label": "vs ₹4,331 recommended" },
+        { "value": "Search", "label": "Not Performance Max" }
+      ],
+      "problem": "Assert IT Solutions needed lead generation for its Odoo implementation service across Delhi NCR — no campaign history, no conversion tracking.",
+      "approach": "Built a Search campaign end to end, deliberately not Performance Max, so targeting stayed under manual control. Curated 13 phrase and exact match keywords around implementation intent, and excluded the generic ERP terms that would have burned budget on wrong-intent traffic. Wrote 8 headlines and 4 descriptions, set up sitelinks, and capped the daily budget at ₹300 against Google's recommended ₹4,331 — which was unrealistic for the business. Installed gtag site-wide on WordPress and configured a lead-form conversion action.",
+      "outcome": "Google disapproved the ad, and the second reason mattered more than the campaign itself: the demo site's free shared domain had been flagged by Safe Browsing because of other sites on the same root domain. Nothing inside Google Ads fixes that. I now check a domain's standing before building any campaign on it.",
+      "outcome_label": "What it taught me",
+      "tools": ["Google Ads", "Conversion Tracking", "WordPress"],
+      "date": "July 2026"
     }
   ]
 }

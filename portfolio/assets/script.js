@@ -109,7 +109,6 @@ function staggerIn(items, trigger, vars = {}) {
     });
 }
 
-staggerIn('.skill-card', '.skills-grid');
 staggerIn('.timeline-item', '.timeline', { from: { x: -34, y: 0 }, to: { x: 0, y: 0, stagger: 0.16 } });
 staggerIn('.contact-card', '.contact-grid', { from: { x: -26, y: 0 }, to: { x: 0, y: 0 } });
 
@@ -136,8 +135,16 @@ if (!REDUCED) {
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g,
   c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-async function loadProjects() {
-  const grid = document.getElementById('projects-grid');
+function caseBlock(label, text, extraClass = '') {
+  if (!text) return '';
+  return `<div class="case-block ${extraClass}">
+            <div class="case-label">${esc(label)}</div>
+            <p>${esc(text)}</p>
+          </div>`;
+}
+
+async function loadCases() {
+  const grid = document.getElementById('cases');
   const empty = document.getElementById('work-empty');
 
   try {
@@ -148,25 +155,43 @@ async function loadProjects() {
     if (!data.projects?.length) { empty.style.display = 'block'; return; }
 
     data.projects.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'project-card spotlight';
+      // Practice work is labelled so nothing reads as client work that isn't.
+      const isPractice = p.kind === 'practice';
+
+      const card = document.createElement('article');
+      card.className = 'case-card spotlight';
       card.innerHTML = `
-        <div class="project-thumb">${esc(p.emoji || '💼')}</div>
-        <div class="project-info">
-          <div class="project-tag">${esc(p.category || 'Project')}</div>
-          <h3>${esc(p.title)}</h3>
-          <p>${esc(p.description)}</p>
-          ${p.highlights?.length ? `<ul class="project-highlights">${
-            p.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
-          ${p.tools?.length ? `<div class="project-tools">${
-            p.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}
-        </div>`;
+        <div class="case-head">
+          ${p.client ? `<span class="case-client">${esc(p.client)}</span>` : ''}
+          <span class="case-tag${isPractice ? ' practice' : ''}">${
+            esc(isPractice ? 'Practice Project' : (p.category || 'Project'))}</span>
+          ${p.date ? `<span class="case-date">${esc(p.date)}</span>` : ''}
+        </div>
+
+        <h3>${esc(p.title)}</h3>
+
+        ${p.metrics?.length ? `<div class="case-metrics">${
+          p.metrics.map(m => `
+            <div class="metric">
+              <span class="metric-value">${esc(m.value)}</span>
+              <span class="metric-label">${esc(m.label)}</span>
+            </div>`).join('')}</div>` : ''}
+
+        <div class="case-body">
+          ${caseBlock('The problem', p.problem)}
+          ${caseBlock('What I did', p.approach)}
+          ${caseBlock(p.outcome_label || 'The outcome', p.outcome, 'outcome')}
+        </div>
+
+        ${p.tools?.length ? `<div class="case-tools">${
+          p.tools.map(t => `<span>${esc(t)}</span>`).join('')}</div>` : ''}`;
+
       grid.appendChild(card);
       bindSpotlight(card);
 
-      gsap.fromTo(card, { opacity: 0, y: 40 }, {
-        opacity: 1, y: 0, duration: 0.75, ease: 'power3.out',
-        scrollTrigger: { trigger: card, start: 'top 88%' }
+      gsap.fromTo(card, { opacity: 0, y: 44 }, {
+        opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: card, start: 'top 86%' }
       });
     });
 
@@ -175,7 +200,18 @@ async function loadProjects() {
     empty.style.display = 'block';
   }
 }
-loadProjects();
+loadCases();
+
+/* ── PROCESS RAIL ─────────────────────────────────────────── */
+const stepsProgress = document.getElementById('steps-progress');
+if (stepsProgress) {
+  gsap.to(stepsProgress, {
+    height: '100%', ease: 'none',
+    scrollTrigger: { trigger: '.steps', start: 'top 72%', end: 'bottom 78%', scrub: 0.6 }
+  });
+}
+staggerIn('.step', '.steps', { from: { x: -28, y: 0 }, to: { x: 0, y: 0, stagger: 0.12 } });
+staggerIn('.service-card', '.services-grid');
 
 /* ── ANCHOR SCROLL ────────────────────────────────────────── */
 /* Previously this called gsap scrollTo without ScrollToPlugin loaded, so
