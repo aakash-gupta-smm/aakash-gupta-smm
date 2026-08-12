@@ -235,7 +235,7 @@ body > *:not(.grain) { position: relative; z-index: 2; }
   white-space: nowrap;
 }
 /* kept inside the visual's box so they never collide with the headline column */
-.pill-1 { top: 30%; left: 18%; }
+.pill-1 { top: 14%; left: 12%; }
 .pill-2 { top: 17%; right: 2%; }
 .pill-3 { top: 50%; left: 12%; }
 .pill-4 { top: 64%; right: 0%; }
