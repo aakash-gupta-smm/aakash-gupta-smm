@@ -27,6 +27,12 @@ ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
+# LinkedIn versions EXPIRE — they only keep a rolling set active, and a stale one
+# fails the whole flow at step 1 with 426 NONEXISTENT_VERSION. If that happens,
+# probe for a live version (POST initializeUpload against 2026xx candidates) and
+# bump this. Verified active: 202508, 202503, 202502.
+LINKEDIN_VERSION = "202508"
+
 # ── DESIGN TOKENS ───────────────────────────────────────────
 SIZE = 1080                      # square carousel, best mobile fill
 BG = (0.035, 0.035, 0.043)       # near-black
@@ -314,7 +320,7 @@ def post_carousel(pdf_path: str, caption: str, title: str) -> bool:
     headers = {
         "Authorization": f"Bearer {token}",
         "X-Restli-Protocol-Version": "2.0.0",
-        "LinkedIn-Version": "202411",
+        "LinkedIn-Version": LINKEDIN_VERSION,
     }
 
     # 1. initialize upload
@@ -325,21 +331,28 @@ def post_carousel(pdf_path: str, caption: str, title: str) -> bool:
     )
     if init.status_code not in (200, 201):
         print(f"❌ initializeUpload failed: {init.status_code} — {init.text}")
+        if init.status_code == 426:
+            print("   → LinkedIn-Version has expired. Probe for a live version and bump LINKEDIN_VERSION.")
         return False
 
     value = init.json()["value"]
     upload_url = value["uploadUrl"]
     document_urn = value["document"]
 
-    # 2. upload the bytes
+    # 2. upload the bytes.
+    # Content-Type is REQUIRED here — the pre-signed URL 400s without it, and
+    # requests does not set one automatically for a raw bytes body.
     with open(pdf_path, "rb") as f:
         up = requests.put(
             upload_url,
-            headers={"Authorization": f"Bearer {token}"},
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/pdf",
+            },
             data=f.read(),
         )
     if up.status_code not in (200, 201):
-        print(f"❌ document upload failed: {up.status_code} — {up.text}")
+        print(f"❌ document upload failed: {up.status_code} — {up.text[:300]}")
         return False
 
     # 3. create the post
@@ -417,6 +430,12 @@ def run(dry_run: bool = False):
 
     success = post_carousel(pdf_path, data["caption"], data["hook"])
     save_log(topic, data, success)
+
+    if not success:
+        # Exit non-zero so the workflow goes red. Returning 0 here is how the
+        # earlier failures stayed invisible for days.
+        raise SystemExit("Carousel failed to publish — see the error above.")
+
     print("  Done.")
     return pdf_path
 
