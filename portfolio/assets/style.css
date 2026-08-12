@@ -382,10 +382,11 @@ body > *:not(.grain) { position: relative; z-index: 2; }
   margin-bottom: 44px;
 }
 .metric {
-  padding: 24px 26px 24px 0;
+  padding: 24px 28px;
   border-right: 1px solid var(--line-soft);
 }
-.metric:last-child { border-right: none; }
+.metric:first-child { padding-left: 0; }
+.metric:last-child { padding-right: 0; border-right: none; }
 .metric-value {
   display: block; color: var(--accent);
   font-size: clamp(1.7rem, 3.1vw, 2.5rem);
@@ -422,14 +423,17 @@ body > *:not(.grain) { position: relative; z-index: 2; }
   border-top: 1px solid var(--line);
 }
 .service-card {
-  padding: 34px 30px 34px 0;
+  /* symmetric padding — with padding only on the right, the next column's
+     text started flush against the divider line */
+  padding: 34px 34px;
   border-right: 1px solid var(--line-soft);
   border-bottom: 1px solid var(--line-soft);
   display: flex; flex-direction: column;
   transition: background 0.4s var(--ease);
 }
 .service-card:hover { background: var(--surface); }
-.service-card:last-child { border-right: none; }
+.service-card:first-child { padding-left: 0; }
+.service-card:last-child { padding-right: 0; border-right: none; }
 .service-icon { display: none; }
 .service-card h3 {
   font-size: 1.35rem; font-weight: 700; font-style: italic;
