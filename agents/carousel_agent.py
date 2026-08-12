@@ -23,7 +23,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.colors import Color
 from reportlab.lib.utils import simpleSplit
 
-from topic_rotation import pick_topic as rotate
+from topic_rotation import generate_topic
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 
@@ -62,9 +62,28 @@ CAROUSEL_POOL = [
 ]
 
 
+PILLARS = ["google-ads", "meta-ads", "shopify", "seo", "strategy", "ai", "analytics"]
+
+PROFILE = """- Digital Marketing Manager, 4+ years, based in Ghaziabad, India
+- Hands-on with Google Ads, Meta Ads, SEO, Shopify, social media
+- Has worked with 20+ brands across tech, e-commerce, education and logistics
+- Targets Indian SMEs and e-commerce brands"""
+
+CAROUSEL_STYLE = """A list-shaped topic that works as a swipeable carousel — it must
+have a countable structure, e.g. "5 X mistakes...", "6 steps to...", "4 things I check
+before...". State the number in the topic. Between 5 and 7 items."""
+
+
 def pick_topic() -> dict:
-    """Next unused carousel topic, based on what has actually been published."""
-    return rotate(CAROUSEL_POOL, LOG_FILE)
+    """Generate a fresh carousel topic; the static pool is only a fallback."""
+    return generate_topic(
+        client,
+        log_file=LOG_FILE,
+        pillars=PILLARS,
+        profile=PROFILE,
+        style=CAROUSEL_STYLE,
+        fallback_pool=CAROUSEL_POOL,
+    )
 
 
 # ── CONTENT GENERATION ──────────────────────────────────────
@@ -386,7 +405,7 @@ def post_carousel(pdf_path: str, caption: str, title: str) -> bool:
 
 # ── LOGGING ─────────────────────────────────────────────────
 
-def save_log(topic: str, data: dict, success: bool):
+def save_log(topic: str, pillar: str, data: dict, success: bool):
     log_file = LOG_FILE
     os.makedirs("data", exist_ok=True)
 
@@ -398,6 +417,7 @@ def save_log(topic: str, data: dict, success: bool):
     logs.append({
         "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "topic": topic,
+        "pillar": pillar,
         "hook": data["hook"],
         "slides": len(data["slides"]),
         "caption": data["caption"],
@@ -415,9 +435,10 @@ def run(dry_run: bool = False):
 
     picked = pick_topic()
     topic = picked["topic"]
-    print(f"  Topic: {topic}")
+    pillar = picked["pillar"]
+    print(f"  Topic: {topic}  [{pillar}]")
 
-    data = generate_carousel(topic, picked["pillar"])
+    data = generate_carousel(topic, pillar)
     print(f"  Generated {len(data['slides'])} slides")
     print(f"  Hook: {data['hook']}")
 
@@ -432,7 +453,7 @@ def run(dry_run: bool = False):
         return pdf_path
 
     success = post_carousel(pdf_path, data["caption"], data["hook"])
-    save_log(topic, data, success)
+    save_log(topic, pillar, data, success)
 
     if not success:
         # Exit non-zero so the workflow goes red. Returning 0 here is how the

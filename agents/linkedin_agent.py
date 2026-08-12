@@ -11,7 +11,7 @@ import requests
 from datetime import datetime
 import anthropic
 
-from topic_rotation import pick_topic as rotate
+from topic_rotation import generate_topic
 
 ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 LINKEDIN_ACCESS_TOKEN = os.environ["LINKEDIN_ACCESS_TOKEN"]
@@ -64,9 +64,29 @@ TOPIC_POOL = [
 ]
 
 
+PILLARS = ["google-ads", "meta-ads", "shopify", "seo", "strategy", "ai", "analytics", "career"]
+
+PROFILE = """- Digital Marketing Manager, 4+ years, based in Ghaziabad, India
+- Hands-on with Google Ads, Meta Ads, SEO, Shopify, social media
+- Has worked with 20+ brands across tech, e-commerce, education and logistics
+- Targets Indian SMEs and e-commerce brands
+- Open to freelance work and full-time Digital Marketing Manager roles"""
+
+TEXT_STYLE = """A single-idea topic for a short text post — an opinion, a lesson, a
+common mistake, or something counter-intuitive he has seen first-hand. It should NOT
+be list-shaped (no "5 things..."), because those run as carousels instead."""
+
+
 def pick_topic() -> dict:
-    """Next unused topic, based on what has actually been published."""
-    return rotate(TOPIC_POOL, LOG_FILE)
+    """Generate a fresh topic; the static pool is only a fallback."""
+    return generate_topic(
+        client,
+        log_file=LOG_FILE,
+        pillars=PILLARS,
+        profile=PROFILE,
+        style=TEXT_STYLE,
+        fallback_pool=TOPIC_POOL,
+    )
 
 
 def generate_linkedin_post(topic: str, pillar: str, post_type: str) -> str:
@@ -150,7 +170,7 @@ def post_to_linkedin(post_text: str) -> bool:
         return False
 
 
-def save_post_log(topic: str, post_text: str, success: bool):
+def save_post_log(topic: str, pillar: str, post_text: str, success: bool):
     """Save post to log file for dashboard."""
     log_file = LOG_FILE
     os.makedirs("data", exist_ok=True)
@@ -163,6 +183,7 @@ def save_post_log(topic: str, post_text: str, success: bool):
     logs.append({
         "date": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "topic": topic,
+        "pillar": pillar,
         "post": post_text,
         "status": "published" if success else "failed"
     })
@@ -180,12 +201,12 @@ def run():
     pillar = topic_data["pillar"]
     post_type = topic_data["type"]
 
-    print(f"  Topic: {topic}")
+    print(f"  Topic: {topic}  [{pillar}]")
     post_text = generate_linkedin_post(topic, pillar, post_type)
     print(f"  Generated post ({len(post_text)} chars)")
 
     success = post_to_linkedin(post_text)
-    save_post_log(topic, post_text, success)
+    save_post_log(topic, pillar, post_text, success)
 
     print(f"  Done.")
 
