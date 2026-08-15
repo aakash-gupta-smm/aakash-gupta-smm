@@ -18,7 +18,7 @@ GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"]  # Gmail App Password
 
 client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
-PORTFOLIO_FILE = "portfolio/data/portfolio.json"
+PORTFOLIO_FILE = "assets/portfolio.json"
 
 
 def send_weekly_checkin():
@@ -55,7 +55,7 @@ def send_weekly_checkin():
       </p>
 
       <p style="font-size: 13px; color: #555; margin-top: 32px;">
-        Your portfolio: <a href="https://yourusername.github.io" style="color: #7c6af7;">yourusername.github.io</a>
+        Your portfolio: <a href="https://aakashguptadm.github.io" style="color: #7c6af7;">aakashguptadm.github.io</a>
       </p>
     </div>
     </body></html>
@@ -75,18 +75,32 @@ def generate_case_study(raw_input: str) -> dict:
 RAW NOTES:
 {raw_input}
 
-Generate a portfolio case study in this exact JSON format:
+Generate a portfolio case study in this exact JSON format — the site renders these
+fields directly, so the shape must match:
 {{
-  "title": "Clear, specific project title (max 8 words)",
-  "category": "Social Media | Paid Ads | Brand Strategy | SEO | Web | Shopify | Course Assignment",
+  "title": "The result, not the task. Max 10 words. e.g. 'Cut cost per purchase by 76%'",
+  "client": "Client or company name",
+  "category": "Meta Ads | Google Ads | Social Media | SEO | Shopify | Web",
+  "kind": "client for paid work, practice for course or self-directed builds",
   "emoji": "One relevant emoji",
-  "description": "2-3 sentences describing what he did and the result. Specific and professional. No fluff.",
-  "highlights": ["Key result or action 1", "Key result or action 2", "Key result or action 3"],
+  "metrics": [
+    {{"value": "Short figure, e.g. '506 to 118' or '3K to 22K'", "label": "What it measures"}}
+  ],
+  "problem": "What was broken before he started. 2-3 sentences, concrete.",
+  "approach": "What he did and why. 3-4 sentences. Show the judgement, not just the tasks.",
+  "outcome": "What changed, with numbers. 2-3 sentences.",
   "tools": ["Tool1", "Tool2"],
   "date": "{datetime.now().strftime('%B %Y')}"
 }}
 
-Be specific. Use numbers if mentioned. Keep it professional. Return only valid JSON."""
+Rules:
+- Give exactly 3 metrics — they render as the stat strip and carry the whole card.
+- Only use numbers that appear in the notes. Never invent or estimate a figure.
+- If the notes contain no measurable outcome, write what is genuinely known in
+  "outcome" (for example that the work is live and running) rather than implying a result.
+- Set "kind" to "practice" for anything that was not real client work.
+
+Return only valid JSON."""
 
     message = client.messages.create(
         model="claude-sonnet-4-6",
@@ -102,7 +116,7 @@ Be specific. Use numbers if mentioned. Keep it professional. Return only valid J
 
 def add_project_to_portfolio(project: dict):
     """Add a new project to portfolio.json."""
-    os.makedirs("portfolio/data", exist_ok=True)
+    os.makedirs("assets", exist_ok=True)
 
     data = {"last_updated": "", "projects": []}
     if os.path.exists(PORTFOLIO_FILE):
@@ -142,7 +156,7 @@ def notify_update(project_title: str):
         <strong style="color: white;">"{project_title}"</strong> has been added to your portfolio.
       </p>
       <p style="margin-top: 24px;">
-        <a href="https://yourusername.github.io" style="background: #7c6af7; color: white; padding: 12px 28px; border-radius: 40px; text-decoration: none; font-size: 14px; font-weight: 600;">View Your Portfolio →</a>
+        <a href="https://aakashguptadm.github.io" style="background: #7c6af7; color: white; padding: 12px 28px; border-radius: 40px; text-decoration: none; font-size: 14px; font-weight: 600;">View Your Portfolio →</a>
       </p>
     </div>
     </body></html>

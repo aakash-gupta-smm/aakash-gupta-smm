@@ -225,7 +225,7 @@ function isThisWeek(dateStr) {
 async function render() {
   const linkedinLog = await loadJSON(BASE + '/data/linkedin_log.json', []);
   const freelanceLog = await loadJSON(BASE + '/data/freelance_log.json', []);
-  const portfolio = await loadJSON(BASE + '/portfolio/data/portfolio.json', { projects: [] });
+  const portfolio = await loadJSON(BASE + '/assets/portfolio.json', { projects: [] });
 
   // Stats
   const thisWeekPosts = linkedinLog.filter(p => isThisWeek(p.date)).length;

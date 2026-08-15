@@ -143,7 +143,7 @@ async function loadCases() {
   const empty = document.getElementById('work-empty');
 
   try {
-    const res = await fetch('data/portfolio.json');
+    const res = await fetch('assets/portfolio.json');
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
