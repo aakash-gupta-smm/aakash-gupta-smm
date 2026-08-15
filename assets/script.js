@@ -143,13 +143,21 @@ async function loadCases() {
   const empty = document.getElementById('work-empty');
 
   try {
-    const res = await fetch('assets/portfolio.json');
+    // Root-relative so this works from both / and /social/.
+    const res = await fetch('/assets/portfolio.json');
     if (!res.ok) throw new Error(res.status);
     const data = await res.json();
 
     if (!data.projects?.length) { empty.style.display = 'block'; return; }
 
-    data.projects.forEach(p => {
+    // The social page leads with organic social work; the default page leads with paid.
+    const variant = document.body.dataset.variant;
+    const projects = variant === 'social'
+      ? [...data.projects].sort((a, b) =>
+          (b.category === 'Social Media') - (a.category === 'Social Media'))
+      : data.projects;
+
+    projects.forEach(p => {
       // Practice work is labelled so nothing reads as client work that isn't.
       const isPractice = p.kind === 'practice';
 
