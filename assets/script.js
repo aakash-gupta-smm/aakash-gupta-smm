@@ -1,4 +1,4 @@
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+gsap.registerPlugin(ScrollTrigger);
 
 const FINE_POINTER = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -216,17 +216,7 @@ staggerIn('.step', '.steps', { from: { x: -28, y: 0 }, to: { x: 0, y: 0, stagger
 staggerIn('.service-card', '.services-grid');
 
 /* ── ANCHOR SCROLL ────────────────────────────────────────── */
-/* Previously this called gsap scrollTo without ScrollToPlugin loaded, so
-   preventDefault fired and nothing scrolled — every nav link was dead. */
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (!target) return;
-    e.preventDefault();
-    gsap.to(window, {
-      scrollTo: { y: target, autoKill: true },
-      duration: REDUCED ? 0 : 1,
-      ease: 'power3.inOut'
-    });
-  });
-});
+/* Handled natively by `html { scroll-behavior: smooth }`.
+   A GSAP scrollTo tween used to live here, but combined with the CSS smooth
+   behaviour its autoKill saw the browser's own animation as user interference
+   and killed the tween on the first frame — so nav links silently did nothing. */

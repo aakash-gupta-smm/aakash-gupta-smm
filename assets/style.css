@@ -30,6 +30,8 @@ body {
 }
 
 a { text-decoration: none; color: inherit; }
+/* keeps hyphenated terms like e-commerce from splitting across lines */
+.nb { white-space: nowrap; }
 img { max-width: 100%; display: block; }
 ul { list-style: none; }
 
