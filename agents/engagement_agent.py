@@ -271,9 +271,35 @@ def todays_targets(targets: list[dict], per_day: int = 5) -> list[dict]:
     return [targets[(start + i) % len(targets)] for i in range(min(per_day, len(targets)))]
 
 
+# LinkedIn hashtag and content-search URLs are deterministic, so these always
+# land on fresh posts without anyone maintaining a list. A static list of
+# profiles goes stale; these don't.
+HUNTING_GROUNDS = [
+    ("#GoogleAds",        "https://www.linkedin.com/feed/hashtag/googleads/"),
+    ("#MetaAds",          "https://www.linkedin.com/feed/hashtag/metaads/"),
+    ("#DigitalMarketing", "https://www.linkedin.com/feed/hashtag/digitalmarketing/"),
+    ("#PerformanceMarketing", "https://www.linkedin.com/feed/hashtag/performancemarketing/"),
+    ("#Shopify",          "https://www.linkedin.com/feed/hashtag/shopify/"),
+    ("#Ecommerce",        "https://www.linkedin.com/feed/hashtag/ecommerce/"),
+    ("#SEO",              "https://www.linkedin.com/feed/hashtag/seo/"),
+    ("Recent posts: Google Ads India",
+     "https://www.linkedin.com/search/results/content/?keywords=google%20ads%20india&sortBy=%22date_posted%22"),
+    ("Recent posts: Meta Ads ROAS",
+     "https://www.linkedin.com/search/results/content/?keywords=meta%20ads%20roas&sortBy=%22date_posted%22"),
+    ("Hiring: Digital Marketing Manager",
+     "https://www.linkedin.com/search/results/content/?keywords=hiring%20digital%20marketing%20manager&sortBy=%22date_posted%22"),
+]
+
+
+def todays_grounds(count: int = 4) -> list[tuple[str, str]]:
+    """Rotate the hunting grounds daily so he isn't in the same feed every day."""
+    start = (datetime.now().timetuple().tm_yday * count) % len(HUNTING_GROUNDS)
+    return [HUNTING_GROUNDS[(start + i) % len(HUNTING_GROUNDS)] for i in range(count)]
+
+
 # ── EMAIL ───────────────────────────────────────────────────
 
-def render_email(brief: dict, targets: list[dict]) -> str:
+def render_email(brief: dict, targets: list[dict], grounds: list[tuple]) -> str:
     today = datetime.now().strftime("%A, %d %B")
 
     stories_html = ""
@@ -329,6 +355,15 @@ def render_email(brief: dict, targets: list[dict]) -> str:
 }}</pre>
           </div>"""
 
+    grounds_html = "".join(
+        f'''<a href="{html.escape(url)}" target="_blank"
+              style="display:block;background:#0d0d10;border:1px solid #2a2a32;border-radius:8px;
+                     padding:13px 16px;margin-bottom:9px;color:#fff;text-decoration:none;font-size:14.5px;">
+              {html.escape(name)}
+              <span style="float:right;color:{ACCENT};">&rarr;</span>
+            </a>'''
+        for name, url in grounds)
+
     ideas = "".join(
         f"<li style='margin-bottom:8px;'>{html.escape(p)}</li>"
         for p in brief.get("post_ideas", [])
@@ -359,7 +394,14 @@ def render_email(brief: dict, targets: list[dict]) -> str:
   {stories_html}
 
   <div style="color:{ACCENT};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin:28px 0 14px;">
-    Profiles to check today
+    Where to comment today &mdash; one click each
+  </div>
+  <div style="background:#141418;border:1px solid #2a2a32;border-radius:10px;padding:20px;">
+    {grounds_html}
+  </div>
+
+  <div style="color:{ACCENT};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;margin:28px 0 14px;">
+    Your own target list
   </div>
   <div style="background:#141418;border:1px solid #2a2a32;border-radius:10px;padding:20px;">
     {targets_html}
@@ -383,7 +425,7 @@ def render_email(brief: dict, targets: list[dict]) -> str:
 
 def send_email(html_body: str):
     msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"LinkedIn brief — {datetime.now().strftime('%d %b')} · 5 comments, 10 connects"
+    msg["Subject"] = f"10:30 LinkedIn brief — {datetime.now().strftime('%d %b')} · 5 comments, 10 connects"
     msg["From"] = f"Aakash's Engagement Agent <{GMAIL_USER}>"
     msg["To"] = GMAIL_USER
     msg.attach(MIMEText(html_body, "html"))
@@ -411,7 +453,8 @@ def run(dry_run: bool = False):
     targets = todays_targets(load_targets())
     print(f"  {len(targets)} target profiles for today")
 
-    body = render_email(brief, targets)
+    grounds = todays_grounds()
+    body = render_email(brief, targets, grounds)
 
     if dry_run:
         out = "data/engagement_preview.html"
